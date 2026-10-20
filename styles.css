@@ -184,6 +184,7 @@ h1 { margin-bottom: 7px; font: 800 clamp(25px, 3vw, 34px)/1.14 Manrope, sans-ser
 .timeline { height: 31px; position: relative; border-radius: 7px; background: repeating-linear-gradient(90deg, #edf2eb 0, #edf2eb calc(7.142% - 1px), #dfe8de calc(7.142% - 1px), #dfe8de 7.142%); }
 .booking-segment { min-width: 3px; height: 19px; position: absolute; top: 6px; overflow: hidden; border: 0; border-radius: 5px; color: white; background: var(--red); font-size: 9px; font-weight: 700; text-align: center; white-space: nowrap; }
 .booking-segment.mine { background: var(--green); }
+.booking-segment.friend { background: #397fbd; }
 .booking-segment:hover { filter: brightness(1.1); z-index: 2; }
 .court-row-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
 .timeline-legend { display: flex; gap: 12px; color: var(--muted); font-size: 9px; }
@@ -206,6 +207,7 @@ h1 { margin-bottom: 7px; font: 800 clamp(25px, 3vw, 34px)/1.14 Manrope, sans-ser
 .equipment-serial { margin-top: 4px; color: #95a198; font: 10px 'DM Sans',sans-serif; letter-spacing: .6px; }
 .equipment-status { min-height: 25px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 9px; padding: 5px 7px; color: #3e5a48; background: #eef3ed; font-size: 9px; font-weight: 700; }
 .equipment-status.status-others { color: #fff; background: #9c3d45; }
+.equipment-status.status-friend { color: #fff; background: #397fbd; }
 .equipment-status.status-own { color: #fff; background: #276746; }
 .equipment-status.status-broken { color: #fff; background: #cf3e45; }
 .equipment-status.status-idle { color: #53685a; background: #f1f4ef; }
@@ -243,7 +245,22 @@ h1 { margin-bottom: 7px; font: 800 clamp(25px, 3vw, 34px)/1.14 Manrope, sans-ser
 .status-summary span { display: inline-flex; align-items: center; gap: 5px; }
 .status-summary b { color: var(--ink); }
 .status-summary i { width: 7px; height: 7px; display: inline-block; border-radius: 2px; background: #e9efea; }
-.status-summary .s-red { background: var(--red); }.status-summary .s-green { background: var(--green); }.status-summary .s-danger { background: var(--red-strong); }
+.status-summary .s-red { background: var(--red); }.status-summary .s-green { background: var(--green); }.status-summary .s-blue { background: #397fbd; }.status-summary .s-danger { background: var(--red-strong); }
+.legend-dot.friend { background: #397fbd; }
+.friend-add-panel { margin-bottom: 18px; }
+.friend-add-form { display: flex; gap: 9px; }
+.friend-add-form .input-control { min-width: 0; flex: 1; }
+.friend-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.friend-invites-panel { margin-bottom: 18px; }
+.friend-list { display: grid; gap: 8px; }
+.friend-row { min-width: 0; display: flex; align-items: center; gap: 11px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-2); }
+.friend-avatar { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border-radius: 50%; color: var(--green); background: var(--green-soft); font-size: 11px; font-weight: 800; }
+.friend-row-info { min-width: 0; flex: 1; display: grid; gap: 3px; }
+.friend-row-info strong { overflow: hidden; color: var(--ink); font-size: 12px; text-overflow: ellipsis; }
+.friend-row-info span,.friend-pending { color: var(--muted); font-size: 10px; }
+.friend-row-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.friend-pending { padding: 5px 8px; border-radius: 999px; background: var(--surface); }
+.modal-actions-wrap { flex-wrap: wrap; }
 .settings-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; }
 .setting-card { padding: 21px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
 .setting-card h2 { margin: 0 0 5px; font: 700 14px Manrope,sans-serif; }
@@ -383,6 +400,11 @@ h1 { margin-bottom: 7px; font: 800 clamp(25px, 3vw, 34px)/1.14 Manrope, sans-ser
   .management-toolbar { align-items: flex-start; flex-direction: column; }
   .management-toolbar .equipment-filter { width: 100%; justify-content: space-between; }
   .status-summary { gap: 8px 12px; }
+  .friend-columns { grid-template-columns: 1fr; }
+  .friend-add-form { flex-direction: column; }
+  .friend-row { align-items: flex-start; flex-wrap: wrap; }
+  .friend-row-info { flex-basis: calc(100% - 48px); }
+  .friend-row-actions { width: 100%; justify-content: flex-end; }
   .settings-grid { grid-template-columns: 1fr; }
   .auth-layout { min-height: calc(100vh - 136px); }
   .auth-card { padding: 22px 18px; }

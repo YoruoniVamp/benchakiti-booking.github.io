@@ -185,15 +185,162 @@ begin
 end;
 $$;
 
+create or replace function public.park_send_friend_request(p_username text)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  caller_id uuid := auth.uid();
+  target_id uuid;
+  low_id uuid;
+  high_id uuid;
+  existing_status text;
+  existing_requester uuid;
+begin
+  if caller_id is null then raise exception 'Sign in to add friends.' using errcode='28000'; end if;
+  select p.id into target_id from public.profiles p where lower(p.username)=lower(trim(p_username));
+  if target_id is null then raise exception 'No account was found with that username.' using errcode='P0002'; end if;
+  if target_id=caller_id then raise exception 'You cannot add yourself as a friend.' using errcode='22023'; end if;
+  low_id := least(caller_id,target_id);
+  high_id := greatest(caller_id,target_id);
+
+  insert into public.friendships(user_low,user_high,requested_by,status)
+  values (low_id,high_id,caller_id,'pending')
+  on conflict (user_low,user_high) do nothing;
+  if found then return 'sent'; end if;
+
+  select f.status,f.requested_by into existing_status,existing_requester
+    from public.friendships f where f.user_low=low_id and f.user_high=high_id for update;
+  if existing_status='accepted' then raise exception 'You are already friends with this user.' using errcode='23505'; end if;
+  if existing_requester=caller_id then raise exception 'A friend request is already pending.' using errcode='23505'; end if;
+  update public.friendships set status='accepted',updated_at=now()
+    where user_low=low_id and user_high=high_id and status='pending';
+  return 'accepted';
+end;
+$$;
+
+create or replace function public.park_respond_friend_request(p_username text,p_accept boolean)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  caller_id uuid := auth.uid();
+  requester_id uuid;
+  low_id uuid;
+  high_id uuid;
+begin
+  if caller_id is null then raise exception 'Sign in to manage friend requests.' using errcode='28000'; end if;
+  select p.id into requester_id from public.profiles p where lower(p.username)=lower(trim(p_username));
+  if requester_id is null or requester_id=caller_id then raise exception 'Friend request not found.' using errcode='P0002'; end if;
+  low_id := least(caller_id,requester_id);
+  high_id := greatest(caller_id,requester_id);
+  if p_accept then
+    update public.friendships set status='accepted',updated_at=now()
+      where user_low=low_id and user_high=high_id and requested_by=requester_id and status='pending';
+  else
+    delete from public.friendships
+      where user_low=low_id and user_high=high_id and requested_by=requester_id and status='pending';
+  end if;
+  if not found then raise exception 'Friend request is no longer pending.' using errcode='P0002'; end if;
+end;
+$$;
+
+create or replace function public.park_remove_friend(p_username text)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  caller_id uuid := auth.uid();
+  friend_id uuid;
+begin
+  if caller_id is null then raise exception 'Sign in to manage friends.' using errcode='28000'; end if;
+  select p.id into friend_id from public.profiles p where lower(p.username)=lower(trim(p_username));
+  if friend_id is null or friend_id=caller_id then raise exception 'Friend not found.' using errcode='P0002'; end if;
+  delete from public.friendships f
+    where f.status='accepted' and f.user_low=least(caller_id,friend_id) and f.user_high=greatest(caller_id,friend_id);
+  if not found then raise exception 'Friend relationship not found.' using errcode='P0002'; end if;
+end;
+$$;
+
+create or replace function public.park_send_play_invite(p_booking_id text,p_friend_username text)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  caller_id uuid := auth.uid();
+  friend_id uuid;
+  booking_owner uuid;
+  sample_row boolean;
+  friendship_exists boolean;
+  existing_status text;
+  invite_id uuid;
+begin
+  if caller_id is null then raise exception 'Sign in to invite a friend.' using errcode='28000'; end if;
+  select p.id into friend_id from public.profiles p where lower(p.username)=lower(trim(p_friend_username));
+  if friend_id is null or friend_id=caller_id then raise exception 'Friend not found.' using errcode='P0002'; end if;
+  select b.user_id,b.is_sample into booking_owner,sample_row from public.court_bookings b where b.id=p_booking_id;
+  if not found or booking_owner is distinct from caller_id or sample_row then
+    raise exception 'You can only invite friends to your own court queue.' using errcode='42501';
+  end if;
+  select exists(select 1 from public.friendships f where f.status='accepted'
+    and f.user_low=least(caller_id,friend_id) and f.user_high=greatest(caller_id,friend_id)) into friendship_exists;
+  if not friendship_exists then raise exception 'You can only invite an accepted friend.' using errcode='42501'; end if;
+
+  select i.id,i.status into invite_id,existing_status from public.play_invites i
+    where i.booking_id=p_booking_id and i.receiver_id=friend_id for update;
+  if existing_status in ('pending','accepted') then raise exception 'This friend has already been invited.' using errcode='23505'; end if;
+  if invite_id is null then
+    insert into public.play_invites(booking_id,sender_id,receiver_id,status)
+      values (p_booking_id,caller_id,friend_id,'pending') returning id into invite_id;
+  else
+    update public.play_invites set sender_id=caller_id,status='pending',created_at=now()
+      where id=invite_id returning id into invite_id;
+  end if;
+  return invite_id;
+end;
+$$;
+
+create or replace function public.park_respond_play_invite(p_invite_id uuid,p_accept boolean)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if auth.uid() is null then raise exception 'Sign in to respond to an invitation.' using errcode='28000'; end if;
+  update public.play_invites set status=case when p_accept then 'accepted' else 'declined' end
+    where id=p_invite_id and receiver_id=auth.uid() and status='pending';
+  if not found then raise exception 'Invitation is no longer available.' using errcode='P0002'; end if;
+end;
+$$;
+
 revoke all on function public.park_make_court_booking(text,smallint,date,smallint,smallint) from public;
 revoke all on function public.park_delete_court_booking(text) from public;
 revoke all on function public.park_make_equipment_booking(text,date,smallint) from public;
 revoke all on function public.park_cancel_equipment_booking(text,date) from public;
 revoke all on function public.park_admin_set_court_status(text,smallint,boolean) from public;
 revoke all on function public.park_admin_set_equipment_status(text,text,text,date,smallint,date,time) from public;
+revoke all on function public.park_send_friend_request(text) from public;
+revoke all on function public.park_respond_friend_request(text,boolean) from public;
+revoke all on function public.park_remove_friend(text) from public;
+revoke all on function public.park_send_play_invite(text,text) from public;
+revoke all on function public.park_respond_play_invite(uuid,boolean) from public;
 grant execute on function public.park_make_court_booking(text,smallint,date,smallint,smallint) to authenticated;
 grant execute on function public.park_delete_court_booking(text) to authenticated;
 grant execute on function public.park_make_equipment_booking(text,date,smallint) to authenticated;
 grant execute on function public.park_cancel_equipment_booking(text,date) to authenticated;
 grant execute on function public.park_admin_set_court_status(text,smallint,boolean) to authenticated;
 grant execute on function public.park_admin_set_equipment_status(text,text,text,date,smallint,date,time) to authenticated;
+grant execute on function public.park_send_friend_request(text) to authenticated;
+grant execute on function public.park_respond_friend_request(text,boolean) to authenticated;
+grant execute on function public.park_remove_friend(text) to authenticated;
+grant execute on function public.park_send_play_invite(text,text) to authenticated;
+grant execute on function public.park_respond_play_invite(uuid,boolean) to authenticated;

@@ -16,6 +16,21 @@ create table if not exists public.profiles (
 create unique index if not exists profiles_username_lower_uidx
   on public.profiles (lower(username));
 
+-- Friendship rows reference the existing user/profile table; passwords remain in Supabase Auth.
+create table if not exists public.friendships (
+  user_low uuid not null references public.profiles(id) on delete cascade,
+  user_high uuid not null references public.profiles(id) on delete cascade,
+  requested_by uuid not null references public.profiles(id) on delete cascade,
+  status text not null default 'pending' check (status in ('pending','accepted')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (user_low, user_high),
+  check (user_low < user_high),
+  check (requested_by = user_low or requested_by = user_high)
+);
+create index if not exists friendships_pending_users_idx
+  on public.friendships (user_low, user_high, status);
+
 -- Hashes of client IPs are kept briefly to limit public account creation.
 create table if not exists public.registration_rate_limits (
   client_key text primary key check (length(client_key) = 64),
@@ -59,6 +74,19 @@ create table if not exists public.court_bookings (
 );
 create index if not exists court_bookings_date_idx on public.court_bookings (booking_date, sport_id, court_number);
 create index if not exists court_bookings_user_idx on public.court_bookings (user_id, booking_date);
+
+create table if not exists public.play_invites (
+  id uuid primary key default gen_random_uuid(),
+  booking_id text not null references public.court_bookings(id) on delete cascade,
+  sender_id uuid not null references public.profiles(id) on delete cascade,
+  receiver_id uuid not null references public.profiles(id) on delete cascade,
+  status text not null default 'pending' check (status in ('pending','accepted','declined')),
+  created_at timestamptz not null default now(),
+  unique (booking_id, receiver_id),
+  check (sender_id <> receiver_id)
+);
+create index if not exists play_invites_receiver_status_idx on public.play_invites (receiver_id, status, created_at desc);
+create index if not exists play_invites_sender_idx on public.play_invites (sender_id, created_at desc);
 
 create table if not exists public.equipment_bookings (
   id text primary key default gen_random_uuid()::text,
@@ -187,6 +215,43 @@ begin
       )) from public.profiles p where p.id = caller_id), '[]'::jsonb)
     else '[]'::jsonb end,
     'currentUser', caller_name,
+    'friends', case when caller_id is null then '[]'::jsonb else coalesce((
+      select jsonb_agg(jsonb_build_object('id', p.id::text, 'username', p.username) order by lower(p.username))
+      from public.friendships f
+      join public.profiles p on p.id = case when f.user_low = caller_id then f.user_high else f.user_low end
+      where f.status = 'accepted' and caller_id in (f.user_low, f.user_high)
+    ), '[]'::jsonb) end,
+    'friendRequests', case when caller_id is null then '[]'::jsonb else coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'id', f.user_low::text || ':' || f.user_high::text,
+        'username', p.username,
+        'direction', case when f.requested_by = caller_id then 'outgoing' else 'incoming' end,
+        'createdAt', f.created_at
+      ) order by f.created_at desc)
+      from public.friendships f
+      join public.profiles p on p.id = case when f.user_low = caller_id then f.user_high else f.user_low end
+      where f.status = 'pending' and caller_id in (f.user_low, f.user_high)
+    ), '[]'::jsonb) end,
+    'playInvites', case when caller_id is null then '[]'::jsonb else coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'id', i.id::text,
+        'bookingId', b.id,
+        'sportId', b.sport_id,
+        'court', b.court_number,
+        'date', b.booking_date::text,
+        'start', b.start_minute,
+        'end', b.end_minute,
+        'sender', sender.username,
+        'receiver', receiver.username,
+        'direction', case when i.receiver_id = caller_id then 'incoming' else 'outgoing' end,
+        'status', i.status
+      ) order by i.created_at desc)
+      from public.play_invites i
+      join public.court_bookings b on b.id = i.booking_id
+      join public.profiles sender on sender.id = i.sender_id
+      join public.profiles receiver on receiver.id = i.receiver_id
+      where caller_id in (i.sender_id, i.receiver_id)
+    ), '[]'::jsonb) end,
     'courtBookings', coalesce((select jsonb_agg(jsonb_build_object(
       'id', b.id,
       'sportId', b.sport_id,
@@ -200,7 +265,12 @@ begin
         when b.user_id = caller_id then caller_name
         else upper(left(b.username_snapshot,4))
       end,
-      'seeded', b.is_sample
+      'seeded', b.is_sample,
+      'isFriend', not b.is_sample and b.user_id is distinct from caller_id and exists (
+        select 1 from public.friendships f
+        where f.status='accepted' and caller_id in (f.user_low,f.user_high)
+          and b.user_id in (f.user_low,f.user_high)
+      )
     ) order by b.booking_date, b.start_minute) from public.court_bookings b), '[]'::jsonb),
     'equipmentBookings', coalesce((select jsonb_agg(jsonb_build_object(
       'id', b.id,
@@ -210,7 +280,12 @@ begin
       'time', b.pickup_minute,
       'user', case when caller_admin or b.user_id = caller_id then b.username_snapshot else 'member' end,
       'pickedUpAt', case when b.picked_up_at is null then '' else to_char(b.picked_up_at,'HH24:MI') end,
-      'staffManaged', b.staff_managed
+      'staffManaged', b.staff_managed,
+      'isFriend', b.user_id is distinct from caller_id and exists (
+        select 1 from public.friendships f
+        where f.status='accepted' and caller_id in (f.user_low,f.user_high)
+          and b.user_id in (f.user_low,f.user_high)
+      )
     ) order by b.booking_date, b.pickup_minute) from public.equipment_bookings b join public.equipment e on e.id=b.equipment_id), '[]'::jsonb),
     'equipmentOverrides', coalesce((select jsonb_object_agg(e.id, jsonb_build_object(
       'status', case when e.status='booked' then 'others' else e.status end
@@ -256,14 +331,16 @@ $$;
 
 -- The browser can only use the guarded RPCs. Direct table access is denied.
 alter table public.profiles enable row level security;
+alter table public.friendships enable row level security;
+alter table public.play_invites enable row level security;
 alter table public.registration_rate_limits enable row level security;
 alter table public.courts enable row level security;
 alter table public.equipment enable row level security;
 alter table public.court_bookings enable row level security;
 alter table public.equipment_bookings enable row level security;
 
-revoke all on public.profiles, public.registration_rate_limits, public.courts, public.equipment, public.court_bookings, public.equipment_bookings from anon, authenticated;
-grant all on public.profiles, public.registration_rate_limits, public.courts, public.equipment, public.court_bookings, public.equipment_bookings to service_role;
+revoke all on public.profiles, public.friendships, public.play_invites, public.registration_rate_limits, public.courts, public.equipment, public.court_bookings, public.equipment_bookings from anon, authenticated;
+grant all on public.profiles, public.friendships, public.play_invites, public.registration_rate_limits, public.courts, public.equipment, public.court_bookings, public.equipment_bookings to service_role;
 revoke all on function public.park_state_read() from public;
 grant execute on function public.park_state_read() to anon, authenticated;
 revoke all on function public.park_claim_registration_slot(text) from public;

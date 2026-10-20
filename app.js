@@ -141,6 +141,11 @@ const uiTranslations = {
   'Administrator access': ['สิทธิ์ผู้ดูแลระบบ', '管理员权限', '管理者アクセス'], 'Add user': ['เพิ่มผู้ใช้', '添加用户', 'ユーザーを追加'],
   'Access': ['สิทธิ์', '权限', '権限'], 'Manage': ['จัดการ', '管理', '管理'], 'No matching users.': ['ไม่พบผู้ใช้ที่ตรงกัน', '没有匹配的用户。', '一致するユーザーはいません。'],
   'Usernames are sorted alphabetically. Head account permissions cannot be changed by an administrator.': ['ชื่อผู้ใช้เรียงตามตัวอักษร ผู้ดูแลระบบไม่สามารถเปลี่ยนสิทธิ์บัญชีหัวหน้าผู้ดูแลได้', '用户名按字母排序。管理员不能更改主管账户的权限。', 'ユーザー名はアルファベット順です。管理者はヘッドアカウントの権限を変更できません。'],
+  'Friends': ['เพื่อน', '好友', '友達'], 'Add friend': ['เพิ่มเพื่อน', '添加好友', '友達を追加'], 'Find friends by username and invite them to play.': ['ค้นหาเพื่อนด้วยชื่อผู้ใช้และชวนมาเล่นกีฬา', '通过用户名查找好友并邀请他们一起运动。', 'ユーザー名で友達を探して、一緒にプレーするよう招待できます。'],
+  'Friend username': ['ชื่อผู้ใช้ของเพื่อน', '好友用户名', '友達のユーザー名'], 'Send request': ['ส่งคำขอ', '发送请求', 'リクエストを送信'], 'Your friends': ['เพื่อนของคุณ', '您的好友', '友達'], 'No friends yet. Send a request to get started.': ['ยังไม่มีเพื่อน ส่งคำขอเพื่อเริ่มต้น', '还没有好友。发送好友请求以开始。', 'まだ友達がいません。リクエストを送って始めましょう。'],
+  'Friend requests': ['คำขอเป็นเพื่อน', '好友请求', '友達リクエスト'], 'Incoming': ['ขาเข้า', '收到的', '受信'], 'Outgoing': ['ขาออก', '已发送', '送信済み'], 'Accept': ['ยอมรับ', '接受', '承認'], 'Decline': ['ปฏิเสธ', '拒绝', '拒否'], 'Remove friend': ['ลบเพื่อน', '删除好友', '友達を削除'], 'No pending friend requests.': ['ไม่มีคำขอเป็นเพื่อนที่รอดำเนินการ', '没有待处理的好友请求。', '保留中の友達リクエストはありません。'],
+  'Play invitations': ['คำเชิญเล่นกีฬา', '运动邀请', 'プレーへの招待'], 'No play invitations yet.': ['ยังไม่มีคำเชิญเล่นกีฬา', '还没有运动邀请。', 'プレーへの招待はまだありません。'], 'Invite to play': ['ชวนเล่นกีฬา', '邀请一起运动', '一緒にプレーに誘う'], 'Invite a friend to this court queue.': ['ชวนเพื่อนมาที่คิวสนามนี้', '邀请好友参加此球场预约。', 'このコート予約に友達を招待します。'], 'Choose a friend': ['เลือกเพื่อน', '选择好友', '友達を選択'], 'Send invite': ['ส่งคำเชิญ', '发送邀请', '招待を送る'], 'Court queue invitation': ['คำเชิญเข้าคิวสนาม', '球场预约邀请', 'コート予約への招待'], 'Friend booked (เพื่อนจอง)': ['เพื่อนจอง', '好友已预约', '友達が予約済み'], 'Friend queue': ['คิวของเพื่อน', '好友预约', '友達の予約'], 'Friend bookings appear in blue.': ['การจองของเพื่อนแสดงเป็นสีน้ำเงิน', '好友的预约会显示为蓝色。', '友達の予約は青色で表示されます。'], 'Friend request sent.': ['ส่งคำขอเป็นเพื่อนแล้ว', '好友请求已发送。', '友達リクエストを送信しました。'], 'You are now friends.': ['ตอนนี้คุณเป็นเพื่อนกันแล้ว', '你们现在是好友了。', '友達になりました。'], 'Friend removed.': ['ลบเพื่อนแล้ว', '已删除好友。', '友達を削除しました。'], 'Invitation sent.': ['ส่งคำเชิญแล้ว', '邀请已发送。', '招待を送信しました。'], 'Invitation accepted.': ['ตอบรับคำเชิญแล้ว', '已接受邀请。', '招待を承認しました。'], 'Invitation declined.': ['ปฏิเสธคำเชิญแล้ว', '已拒绝邀请。', '招待を断りました。'], 'That username was not found.': ['ไม่พบชื่อผู้ใช้นี้', '未找到该用户名。', 'そのユーザー名は見つかりません。'],
+  'Friend request declined.': ['ปฏิเสธคำขอเป็นเพื่อนแล้ว', '已拒绝好友请求。', '友達リクエストを拒否しました。'], 'You cannot add yourself as a friend.': ['ไม่สามารถเพิ่มตัวเองเป็นเพื่อนได้', '不能添加自己为好友。', '自分を友達に追加することはできません。'], 'You are already friends with this user.': ['คุณเป็นเพื่อนกับผู้ใช้นี้แล้ว', '您已经是此用户的好友。', 'このユーザーとはすでに友達です。'], 'A friend request is already pending.': ['มีคำขอเป็นเพื่อนที่รอดำเนินการอยู่แล้ว', '好友请求已在等待处理中。', '友達リクエストはすでに保留中です。'], 'Add a friend before sending a play invitation.': ['เพิ่มเพื่อนก่อนส่งคำเชิญเล่นกีฬา', '请先添加好友，再发送运动邀请。', 'プレーに招待する前に友達を追加してください。'], 'You can only invite an accepted friend to your own court queue.': ['เชิญได้เฉพาะเพื่อนที่ตอบรับแล้วให้เข้าร่วมคิวสนามของคุณ', '只能邀请已接受好友请求的好友参加您自己的球场预约。', '承認済みの友達だけを自分のコート予約に招待できます。'], 'This friend has already been invited.': ['คุณส่งคำเชิญให้เพื่อนคนนี้แล้ว', '已邀请过这位好友。', 'この友達はすでに招待済みです。'], 'Friend request declined.': ['ปฏิเสธคำขอเป็นเพื่อนแล้ว', '已拒绝好友请求。', '友達リクエストを拒否しました。'], 'Pending': ['รอดำเนินการ', '待处理', '保留中'], 'Accepted': ['ตอบรับแล้ว', '已接受', '承認済み'], 'Declined': ['ปฏิเสธแล้ว', '已拒绝', '拒否済み'], 'Sent': ['ส่งแล้ว', '已发送', '送信済み'], 'Friend booked': ['เพื่อนจอง', '好友已预约', '友達が予約済み'], 'Social play': ['เล่นกีฬากับเพื่อน', '好友一起运动', '友達とプレー'], 'Court bookings your friends have invited you to join': ['คิวสนามที่เพื่อนชวนคุณเข้าร่วม', '好友邀请您参加的球场预约', '友達から参加に誘われたコート予約'], 'Friend request is no longer pending.': ['คำขอเป็นเพื่อนไม่อยู่ในสถานะรอดำเนินการแล้ว', '好友请求已不再等待处理。', '友達リクエストは保留中ではありません。'],
   'Court queue': ['คิวสนาม', '球场预约', 'コート予約'], 'Pick a start and end time. Each booking is at least 30 minutes.': ['เลือกเวลาเริ่มต้นและสิ้นสุด การจองแต่ละครั้งต้องมีอย่างน้อย 30 นาที', '选择开始和结束时间。每次预约至少 30 分钟。', '開始時刻と終了時刻を選択してください。予約は30分以上必要です。'],
   'Start time': ['เวลาเริ่มต้น', '开始时间', '開始時刻'], 'End time': ['เวลาสิ้นสุด', '结束时间', '終了時刻'],
   'Court hours are 7:00 AM–9:00 PM. A time cannot overlap another queue on this court.': ['สนามเปิด 7:00–21:00 น. เวลาไม่สามารถทับซ้อนกับคิวอื่นในสนามนี้ได้', '球场开放时间为 7:00–21:00。所选时间不能与此球场的其他预约重叠。', 'コート利用時間は7:00〜21:00です。同じコートの他の予約と重複できません。'],
@@ -211,6 +216,12 @@ const uiTranslations = {
   'Five-a-side courts · 4 pitches': ['สนามฟุตบอล 5 คน · 4 สนาม', '五人制球场 · 4 个场地', '5人制コート · 4面'],
   'Table tennis tables · 3 tables': ['โต๊ะปิงปอง · 3 โต๊ะ', '乒乓球台 · 3 张', '卓球台 · 3台'],
   'Outdoor courts · 4 courts': ['สนามกลางแจ้ง · 4 สนาม', '室外球场 · 4 个球场', '屋外コート · 4面'],
+  'A friend has booked this item.': ['เพื่อนจองอุปกรณ์ชิ้นนี้แล้ว', '好友已预约此器材。', '友達がこの用具を予約しました。'],
+  'No account was found with that username.': ['ไม่พบบัญชีที่ใช้ชื่อผู้ใช้นี้', '找不到此用户名对应的账户。', 'そのユーザー名のアカウントが見つかりません。'],
+  'Friend not found.': ['ไม่พบเพื่อน', '未找到好友。', '友達が見つかりません。'],
+  'Friend relationship not found.': ['ไม่พบความสัมพันธ์ของเพื่อน', '未找到好友关系。', '友達関係が見つかりません。'],
+  'You can only invite friends to your own court queue.': ['เชิญเพื่อนได้เฉพาะคิวสนามของคุณเอง', '只能邀请好友参加您自己的球场预约。', '自分のコート予約にのみ友達を招待できます。'],
+  'You can only invite an accepted friend.': ['เชิญได้เฉพาะเพื่อนที่ตอบรับแล้ว', '只能邀请已接受好友请求的用户。', '承認済みの友達だけを招待できます。'],
 };
 const sortedTranslationKeys = Object.keys(uiTranslations).sort((a, b) => b.length - a.length);
 function translateText(value) {
@@ -301,7 +312,7 @@ const sports = [
 
 const routeNames = {
   home: 'Home', courts: 'Book a court', courtDetail: 'Court schedule', equipment: 'Equipment', equipmentDetail: 'Equipment availability',
-  settings: 'Settings', parkAdmin: 'Court & equipment admin', adminUsers: 'User administration', login: 'Log in', register: 'Create account',
+  friends: 'Friends', settings: 'Settings', parkAdmin: 'Court & equipment admin', adminUsers: 'User administration', login: 'Log in', register: 'Create account',
 };
 
 const iconPaths = {
@@ -334,7 +345,7 @@ const timeOptions = (from = 7 * 60, to = 21 * 60) => Array.from({ length: (to - 
 const roleName = role => role === 'head' ? 'Head account' : role === 'admin' ? 'Administrator' : 'Park member';
 const initials = name => (name || 'G').slice(0, 2).toUpperCase();
 const sportById = id => sports.find(s => s.id === id) || sports[0];
-const protectedRoutes = new Set(['courts','courtDetail','equipment','equipmentDetail']);
+const protectedRoutes = new Set(['courts','courtDetail','equipment','equipmentDetail','friends']);
 
 function initialData() {
   const seededUsers = [
@@ -348,15 +359,15 @@ function initialData() {
     } catch { return null; }
   })();
   if (backendConfigured) {
-    return { users: [], currentUser: null, theme: existing?.theme || 'system', locale: ['en','th','zh','ja'].includes(existing?.locale) ? existing.locale : 'en', courtBookings: [], equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {} };
+    return { users: [], currentUser: null, theme: existing?.theme || 'system', locale: ['en','th','zh','ja'].includes(existing?.locale) ? existing.locale : 'en', courtBookings: [], equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [] };
   }
   if (existing && Array.isArray(existing.users) && existing.users.some(u => u.role === 'head')) {
     const users = existing.users;
     if (!users.some(u => u.role === 'admin')) users.unshift(seededUsers[0]);
-    return { users, currentUser: existing.currentUser || null, theme: existing.theme || 'system', locale: ['en','th','zh','ja'].includes(existing.locale) ? existing.locale : 'en', courtBookings: existing.courtBookings || [], equipmentBookings: existing.equipmentBookings || [], equipmentOverrides: existing.equipmentOverrides || {}, courtMaintenance: existing.courtMaintenance || {} };
+    return { users, currentUser: existing.currentUser || null, theme: existing.theme || 'system', locale: ['en','th','zh','ja'].includes(existing.locale) ? existing.locale : 'en', courtBookings: existing.courtBookings || [], equipmentBookings: existing.equipmentBookings || [], equipmentOverrides: existing.equipmentOverrides || {}, courtMaintenance: existing.courtMaintenance || {}, friends: [], friendRequests: [], playInvites: existing.playInvites || [], friendships: existing.friendships || [] };
   }
   return {
-    users: seededUsers, currentUser: null, theme: 'system', locale: 'en', courtBookings: makeSeedCourts(), equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {},
+    users: seededUsers, currentUser: null, theme: 'system', locale: 'en', courtBookings: makeSeedCourts(), equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [],
   };
 }
 
@@ -389,11 +400,51 @@ function saveData() {
     localStorage.setItem(PREFERENCES_KEY, JSON.stringify({ theme: data.theme, locale: data.locale }));
     return;
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ users: data.users, currentUser: data.currentUser, theme: data.theme, locale: data.locale, courtBookings: data.courtBookings, equipmentBookings: data.equipmentBookings, equipmentOverrides: data.equipmentOverrides, courtMaintenance: data.courtMaintenance }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ users: data.users, currentUser: data.currentUser, theme: data.theme, locale: data.locale, courtBookings: data.courtBookings, equipmentBookings: data.equipmentBookings, equipmentOverrides: data.equipmentOverrides, courtMaintenance: data.courtMaintenance, friendships: data.friendships, playInvites: data.playInvites }));
 }
 function currentUser() { return data.users.find(u => u.username === data.currentUser) || null; }
 function isAdmin() { return ['admin','head'].includes(currentUser()?.role); }
 function isHead() { return currentUser()?.role === 'head'; }
+function currentFriends() {
+  if (backendConfigured) return data.friends || [];
+  return (data.friendships || []).filter(row => row.status === 'accepted' && [row.requester,row.target].includes(data.currentUser))
+    .map(row => ({ username: row.requester === data.currentUser ? row.target : row.requester }));
+}
+function currentFriendRequests() {
+  if (backendConfigured) return data.friendRequests || [];
+  return (data.friendships || []).filter(row => row.status === 'pending' && [row.requester,row.target].includes(data.currentUser))
+    .map(row => ({ id: row.id, username: row.requester === data.currentUser ? row.target : row.requester, direction: row.target === data.currentUser ? 'incoming' : 'outgoing' }));
+}
+function currentPlayInvites() {
+  if (backendConfigured) return data.playInvites || [];
+  return (data.playInvites || []).filter(row => [row.sender,row.receiver].includes(data.currentUser))
+    .map(row => ({ ...row, direction: row.receiver === data.currentUser ? 'incoming' : 'outgoing' }));
+}
+function isFriendUsername(username) {
+  return currentFriends().some(friend => friend.username?.toLowerCase() === String(username || '').toLowerCase());
+}
+function isFriendBooking(booking) { return Boolean(booking?.isFriend || isFriendUsername(booking?.user)); }
+function renameLocalUserReferences(oldName,newName) {
+  data.courtBookings.forEach(booking=>{if(booking.user===oldName)booking.user=newName;});
+  data.equipmentBookings.forEach(booking=>{if(booking.user===oldName)booking.user=newName;});
+  (data.friendships||[]).forEach(row=>{
+    if(row.requester===oldName)row.requester=newName;
+    if(row.target===oldName)row.target=newName;
+    row.id=[row.requester,row.target].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'})).join(':');
+  });
+  (data.playInvites||[]).forEach(invite=>{
+    if(invite.sender===oldName)invite.sender=newName;
+    if(invite.receiver===oldName)invite.receiver=newName;
+  });
+}
+function removeLocalUserReferences(username) {
+  const deletedBookings=new Set(data.courtBookings.filter(booking=>booking.user===username).map(booking=>booking.id));
+  data.users=data.users.filter(user=>user.username!==username);
+  data.courtBookings=data.courtBookings.filter(booking=>booking.user!==username);
+  data.equipmentBookings=data.equipmentBookings.filter(booking=>booking.user!==username);
+  data.friendships=(data.friendships||[]).filter(row=>row.requester!==username&&row.target!==username);
+  data.playInvites=(data.playInvites||[]).filter(invite=>invite.sender!==username&&invite.receiver!==username&&!deletedBookings.has(invite.bookingId));
+}
 function usernameLoginEmail(username) {
   const bytes = new TextEncoder().encode(String(username || '').trim().toLowerCase());
   let binary = '';
@@ -408,6 +459,9 @@ function applyRemoteSnapshot(snapshot) {
   data.equipmentBookings = snapshot.equipmentBookings || [];
   data.equipmentOverrides = snapshot.equipmentOverrides || {};
   data.courtMaintenance = snapshot.courtMaintenance || {};
+  data.friends = snapshot.friends || [];
+  data.friendRequests = snapshot.friendRequests || [];
+  data.playInvites = snapshot.playInvites || [];
 }
 async function refreshRemoteState() {
   const { data: snapshot, error } = await backendClient.rpc('park_state_read');
@@ -463,10 +517,10 @@ function startRemoteRefresh() {
   setInterval(async () => {
     if (!backendReady || document.hidden || $('#modalRoot').innerHTML.trim()) return;
     if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
-    const before=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance]);
+    const before=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance,data.friends,data.friendRequests,data.playInvites]);
     try {
       await refreshRemoteState();
-      const after=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance]);
+      const after=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance,data.friends,data.friendRequests,data.playInvites]);
       if(before!==after) render();
     } catch(error) { console.warn('Could not refresh shared park data',error); }
   },15000);
@@ -510,7 +564,7 @@ function navButton(route, label, iconName, active, extra = '') {
 }
 function renderNavigation() {
   const active = state.route === 'courtDetail' ? 'courts' : state.route === 'equipmentDetail' ? 'equipment' : state.route;
-  const items = [navButton('home','Overview','home',active === 'home'),navButton('courts','Book a court','court',active === 'courts'),navButton('equipment','Equipment','equipment',active === 'equipment'),navButton('settings','Settings','settings',active === 'settings')];
+  const items = [navButton('home','Overview','home',active === 'home'),navButton('courts','Book a court','court',active === 'courts'),navButton('equipment','Equipment','equipment',active === 'equipment'),...(currentUser()?[navButton('friends','Friends','users',active === 'friends')]:[]),navButton('settings','Settings','settings',active === 'settings')];
   const admin = isAdmin() ? `${navButton('parkAdmin','Park management','equipment',active === 'parkAdmin')}${navButton('adminUsers','User administration','users',active === 'adminUsers')}` : '';
   const user = currentUser();
   $('#sidebar').innerHTML = `<div class="brand"><div class="brand-mark">${icon('leaf')}</div><div><div class="brand-name">Benjakitti Active</div><div class="brand-sub">Park sports, made easier</div></div></div>
@@ -518,7 +572,7 @@ function renderNavigation() {
     <div class="sidebar-bottom"><div class="park-card"><div class="park-card-label">A little more active</div><div class="park-card-title">Find your time<br>to play.</div><div class="park-card-meta">Live park availability · Bangkok</div></div>
       <div class="profile-row"><div class="avatar">${escapeHTML(initials(user?.username || 'Guest'))}</div><div class="profile-info"><div class="profile-name" data-no-translate>${escapeHTML(user?.username || 'Guest visitor')}</div><div class="profile-role">${escapeHTML(user ? roleName(user.role) : 'Browse as a guest')}</div></div><button class="profile-menu" type="button" aria-label="${user ? 'Log out' : 'Log in'}" data-action="${user ? 'logout' : 'login'}">${icon(user ? 'logout' : 'arrow')}</button></div>
     </div>`;
-  $('#mobileNav').innerHTML = `${navButton('home','Home','home',active === 'home')}${navButton('courts','Courts','court',active === 'courts')}${navButton('equipment','Equipment','equipment',active === 'equipment')}${navButton('settings','Settings','settings',active === 'settings')}${isAdmin() ? navButton('parkAdmin','Manage','equipment',active === 'parkAdmin','admin-mobile') : ''}${isAdmin() ? navButton('adminUsers','Users','users',active === 'adminUsers','admin-mobile') : ''}`;
+  $('#mobileNav').innerHTML = `${navButton('home','Home','home',active === 'home')}${navButton('courts','Courts','court',active === 'courts')}${navButton('equipment','Equipment','equipment',active === 'equipment')}${currentUser()?navButton('friends','Friends','users',active === 'friends'):''}${navButton('settings','Settings','settings',active === 'settings')}${isAdmin() ? navButton('parkAdmin','Manage','equipment',active === 'parkAdmin','admin-mobile') : ''}${isAdmin() ? navButton('adminUsers','Users','users',active === 'adminUsers','admin-mobile') : ''}`;
 }
 function renderTopbar() {
   const user = currentUser();
@@ -538,16 +592,16 @@ function equipmentRecords(sportId) {
 }
 function equipmentStatus(item, date = state.equipmentDate) {
   const booking = data.equipmentBookings.find(b => b.equipmentId === item.id && b.date === date);
-  if (booking) return booking.user === data.currentUser ? 'own' : 'others';
+  if (booking) return booking.user === data.currentUser ? 'own' : isFriendBooking(booking) ? 'friend' : 'others';
   const override = data.equipmentOverrides[item.id];
   if (override?.status) return override.status;
   return item.initialStatus;
 }
 function courtIsClosed(sportId, court) { return Boolean(data.courtMaintenance[`${sportId}-${court}`]); }
-function statusText(status) { return ({ idle: 'Idle', others: 'Booked · others', own: 'Booked · you', broken: 'Broken' })[status] || 'Idle'; }
+function statusText(status) { return ({ idle: 'Idle', others: 'Booked · others', own: 'Booked · you', friend: 'Friend booked (เพื่อนจอง)', broken: 'Broken' })[status] || 'Idle'; }
 function dailyEquipmentStats() {
   const all = sports.flatMap(s => equipmentRecords(s.id));
-  const counts = { idle: 0, others: 0, own: 0, broken: 0 };
+  const counts = { idle: 0, others: 0, own: 0, friend: 0, broken: 0 };
   all.forEach(item => counts[equipmentStatus(item, todayISO())]++);
   return { ...counts, total: all.length, available: counts.idle };
 }
@@ -631,7 +685,7 @@ function renderHome() {
   }).join('');
   $('#main').innerHTML = `<section class="hero-banner"><div class="hero-copy"><div class="hero-kicker"><i class="status-dot"></i> A better way to get moving</div><h1>Your next game starts<br>with knowing when.</h1><p>Check live court schedules and equipment availability before you head to the park. Less guesswork, more play.</p><div class="quick-actions"><button class="button button-primary" data-nav="courts">${icon('court')} Book a court</button><button class="button button-outline" data-nav="equipment">${icon('equipment')} Find equipment</button></div></div><div class="hero-illustration">${sportSvg('basketball')}</div></section>
     <div class="metric-grid"><article class="metric-card"><div class="metric-top"><span>Court activity</span><span class="metric-icon">${icon('court')}</span></div><div class="metric-value-row"><span class="metric-value">${activeDensity}%</span><span class="metric-unit">in use right now</span></div><div class="metric-note"><strong>${escapeHTML(busy)}</strong> · 15 courts across 4 sports</div></article>
-    <article class="metric-card"><div class="metric-top"><span>Equipment ready</span><span class="metric-icon">${icon('check')}</span></div><div class="metric-value-row"><span class="metric-value">${equip.available}</span><span class="metric-unit">of ${equip.total} pieces</span></div><div class="metric-note"><strong>${equip.others + equip.own} booked for today</strong></div></article>
+    <article class="metric-card"><div class="metric-top"><span>Equipment ready</span><span class="metric-icon">${icon('check')}</span></div><div class="metric-value-row"><span class="metric-value">${equip.available}</span><span class="metric-unit">of ${equip.total} pieces</span></div><div class="metric-note"><strong>${equip.others + equip.own + equip.friend} booked for today</strong></div></article>
     <article class="metric-card"><div class="metric-top"><span>Needs attention</span><span class="metric-icon" style="color:#b54a50;background:#fae9e9">${icon('alert')}</span></div><div class="metric-value-row"><span class="metric-value">${equip.broken}</span><span class="metric-unit">items reported broken</span></div><div class="metric-note">Across all 4 equipment types · ${brokenPct}%</div></article>
     <article class="metric-card"><div class="metric-top"><span>Your upcoming queue</span><span class="metric-icon">${icon('calendar')}</span></div><div class="metric-value-row"><span class="metric-value">${user ? queues.length : '—'}</span><span class="metric-unit">${user ? 'upcoming bookings' : 'sign in to view'}</span></div><div class="metric-note">${user ? 'Your park plans, all in one place' : '<strong>One account</strong> for all your bookings'}</div></article></div>
     <div class="content-grid"><section class="panel"><div class="panel-heading"><div><h2 class="panel-title">Park activity</h2><p class="panel-subtitle">Court use and equipment bookings · estimated from park schedules</p></div><div class="segmented" role="group" aria-label="Chart time range"><button class="segment-button ${state.graphPeriod === 'day' ? 'active' : ''}" data-period="day">Day</button><button class="segment-button ${state.graphPeriod === 'week' ? 'active' : ''}" data-period="week">Week</button><button class="segment-button ${state.graphPeriod === 'month' ? 'active' : ''}" data-period="month">Month</button></div></div>
@@ -703,11 +757,12 @@ function renderCourtDetail() {
     const bookings=courtBookings(sport.id,court,date);
     const segments=bookings.map(b=>{
       const left=Math.max(0,(b.start-420)/840*100),width=Math.max(1.2,(b.end-b.start)/840*100),mine=b.user===data.currentUser;
-      return `<button class="booking-segment ${mine?'mine':''}" data-no-translate data-no-translate-title style="left:${left}%;width:${width}%" title="${escapeHTML(b.user.slice(0,4).toUpperCase())} · ${timeText(b.start)}–${timeText(b.end)}" data-court-booking="${escapeHTML(b.id)}">${width>7?escapeHTML(b.user.slice(0,4).toUpperCase()):''}</button>`;
+      const friend=!mine&&isFriendBooking(b);
+      return `<button class="booking-segment ${mine?'mine':friend?'friend':''}" data-no-translate data-no-translate-title style="left:${left}%;width:${width}%" title="${escapeHTML(b.user.slice(0,4).toUpperCase())} · ${timeText(b.start)}–${timeText(b.end)}" data-court-booking="${escapeHTML(b.id)}">${width>7?escapeHTML(b.user.slice(0,4).toUpperCase()):''}</button>`;
     }).join('');
     const nowMins=new Date().getHours()*60+new Date().getMinutes();
     const activeNow=date===todayISO()&&bookings.some(b=>b.start<=nowMins&&b.end>nowMins), closed=courtIsClosed(sport.id,court);
-    return `<article class="court-row ${closed?'court-row-closed':''}"><div class="court-thumb">${courtSvg(sport.id)}</div><div class="court-content"><div class="court-row-head"><div><h2 class="court-title">${escapeHTML(sport.label)} · Court ${court}</h2><div class="court-meta">${bookings.length} booked time${bookings.length===1?'':'s'} on ${escapeHTML(dateLabel(date))}</div></div><span class="court-open-label ${closed?'court-label-closed':''}">${closed?'Out of service':activeNow?'In use now':bookings.length?`${bookings.length} queued`:'Open schedule'}</span></div><div class="timeline-head">${Array.from({length:15},(_,i)=>`<span>${i%2===0?`${i===0?7:7+i}:00`:''}</span>`).join('')}</div><div class="timeline">${segments}</div><div class="court-row-bottom"><div class="timeline-legend"><span><i class="legend-dot"></i>Booked</span><span><i class="legend-dot mine"></i>Your queue</span></div><button class="button button-primary button-small" data-action="open-court-booking" data-sport="${sport.id}" data-court="${court}" ${closed?'disabled':''}>${closed?'Unavailable':`Make a queue ${icon('plus')}`}</button></div></div></article>`;
+    return `<article class="court-row ${closed?'court-row-closed':''}"><div class="court-thumb">${courtSvg(sport.id)}</div><div class="court-content"><div class="court-row-head"><div><h2 class="court-title">${escapeHTML(sport.label)} · Court ${court}</h2><div class="court-meta">${bookings.length} booked time${bookings.length===1?'':'s'} on ${escapeHTML(dateLabel(date))}</div></div><span class="court-open-label ${closed?'court-label-closed':''}">${closed?'Out of service':activeNow?'In use now':bookings.length?`${bookings.length} queued`:'Open schedule'}</span></div><div class="timeline-head">${Array.from({length:15},(_,i)=>`<span>${i%2===0?`${i===0?7:7+i}:00`:''}</span>`).join('')}</div><div class="timeline">${segments}</div><div class="court-row-bottom"><div class="timeline-legend"><span><i class="legend-dot"></i>Booked</span><span><i class="legend-dot mine"></i>Your queue</span><span><i class="legend-dot friend"></i>Friend queue</span></div><button class="button button-primary button-small" data-action="open-court-booking" data-sport="${sport.id}" data-court="${court}" ${closed?'disabled':''}>${closed?'Unavailable':`Make a queue ${icon('plus')}`}</button></div></div></article>`;
   }).join('');
   $('#main').innerHTML = `<div class="page-heading"><div><div class="eyebrow">Court schedule</div><h1>${escapeHTML(sport.label)}</h1><p>Tap a timeline booking for details or choose an open time below.</p></div><button class="button button-outline" data-nav="courts">← All sports</button></div><div class="equipment-toolbar"><p>Daily hours · <strong>7:00 AM – 9:00 PM</strong> · Each block is 30 minutes</p><div class="equipment-filter"><label class="panel-subtitle" for="courtDate">Show date</label><input class="input-control" type="date" id="courtDate" min="${todayISO()}" value="${escapeHTML(date)}"></div></div><div class="court-list">${timelines}</div><p class="footnote">${scheduleNote}</p>`;
   translateUI($('#main'));
@@ -723,8 +778,27 @@ function renderEquipment() {
     return `<button type="button" class="equipment-card" data-equipment-id="${item.id}" ${clickable?'':'disabled'} aria-label="${escapeHTML(item.name)} ${item.id}, ${statusText(status)}"><div class="equipment-visual">${equipmentSvg(sport.id,i)}</div><div class="equipment-info"><div class="equipment-name">${escapeHTML(item.name)}</div><div class="equipment-serial">Serial · ${item.id}</div></div><div class="equipment-status status-${status}"><i class="status-mini-dot"></i>${escapeHTML(statusText(status))}</div></button>`;
   }).join('');
   $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Equipment desk</div><h1>Borrow equipment</h1><p>See what’s ready to use before you arrive.</p></div><button class="button button-outline" data-nav="home">${icon('home')} Overview</button></div><div class="sport-grid" style="margin-bottom:18px">${sports.map(s=>`<button type="button" class="sport-card" data-open-equipment="${s.id}"><div class="sport-visual" style="min-height:92px">${sportSvg(s.id)}</div><div class="sport-card-body"><h2 class="sport-card-title">${escapeHTML(s.label)}</h2><div class="sport-card-bottom"><span>30 pieces</span><strong>${s.id===sport.id?'Viewing':'See items'} ${icon('arrow')}</strong></div></div></button>`).join('')}</div>
-    <div class="equipment-toolbar"><p>Availability for <strong>${escapeHTML(dateLabel(state.equipmentDate))}</strong> · ${escapeHTML(sport.label)} items</p><div class="equipment-filter"><input class="input-control" id="equipmentSearch" type="search" placeholder="Search serial" aria-label="Search equipment serial" value="${escapeHTML(state.equipmentSearch)}"><input class="input-control" id="equipmentDate" type="date" min="${todayISO()}" aria-label="Select equipment date" value="${escapeHTML(state.equipmentDate)}"><select class="select-control" id="equipmentFilter" aria-label="Filter by equipment status"><option value="all" ${state.equipmentFilter==='all'?'selected':''}>All status</option><option value="idle" ${state.equipmentFilter==='idle'?'selected':''}>Idle</option><option value="others" ${state.equipmentFilter==='others'?'selected':''}>Booked by others</option><option value="broken" ${state.equipmentFilter==='broken'?'selected':''}>Broken</option><option value="own" ${state.equipmentFilter==='own'?'selected':''}>Booked by you</option></select></div></div>
-    <div class="status-summary"><span><i></i><b>${counts.idle||0}</b> idle</span><span><i class="s-red"></i><b>${counts.others||0}</b> booked</span><span><i class="s-green"></i><b>${counts.own||0}</b> yours</span><span><i class="s-danger"></i><b>${counts.broken||0}</b> broken</span></div><div class="equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this search.</div>'}</div><p class="footnote">${equipmentNote}</p>`;
+    <div class="equipment-toolbar"><p>Availability for <strong>${escapeHTML(dateLabel(state.equipmentDate))}</strong> · ${escapeHTML(sport.label)} items</p><div class="equipment-filter"><input class="input-control" id="equipmentSearch" type="search" placeholder="Search serial" aria-label="Search equipment serial" value="${escapeHTML(state.equipmentSearch)}"><input class="input-control" id="equipmentDate" type="date" min="${todayISO()}" aria-label="Select equipment date" value="${escapeHTML(state.equipmentDate)}"><select class="select-control" id="equipmentFilter" aria-label="Filter by equipment status"><option value="all" ${state.equipmentFilter==='all'?'selected':''}>All status</option><option value="idle" ${state.equipmentFilter==='idle'?'selected':''}>Idle</option><option value="others" ${state.equipmentFilter==='others'?'selected':''}>Booked by others</option><option value="friend" ${state.equipmentFilter==='friend'?'selected':''}>Friend booked</option><option value="broken" ${state.equipmentFilter==='broken'?'selected':''}>Broken</option><option value="own" ${state.equipmentFilter==='own'?'selected':''}>Booked by you</option></select></div></div>
+    <div class="status-summary"><span><i></i><b>${counts.idle||0}</b> idle</span><span><i class="s-red"></i><b>${counts.others||0}</b> booked</span><span><i class="s-green"></i><b>${counts.own||0}</b> yours</span><span><i class="s-blue"></i><b>${counts.friend||0}</b> friends</span><span><i class="s-danger"></i><b>${counts.broken||0}</b> broken</span></div><div class="equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this search.</div>'}</div><p class="footnote">${equipmentNote}</p>`;
+  translateUI($('#main'));
+}
+
+function renderFriends() {
+  const friends=currentFriends().slice().sort((a,b)=>a.username.localeCompare(b.username,undefined,{sensitivity:'base'}));
+  const requests=currentFriendRequests();
+  const invites=currentPlayInvites();
+  const friendRows=friends.length?friends.map(friend=>`<article class="friend-row"><div class="friend-avatar">${escapeHTML(initials(friend.username))}</div><div class="friend-row-info"><strong data-no-translate>${escapeHTML(friend.username)}</strong><span>Friend queue</span></div><button type="button" class="button button-outline button-small" data-remove-friend="${escapeHTML(friend.username)}">Remove friend</button></article>`).join(''):`<div class="empty-state">No friends yet. Send a request to get started.</div>`;
+  const requestRows=requests.length?requests.map(request=>`<article class="friend-row"><div class="friend-avatar">${escapeHTML(initials(request.username))}</div><div class="friend-row-info"><strong data-no-translate>${escapeHTML(request.username)}</strong><span>${request.direction==='incoming'?'Incoming':'Outgoing'}</span></div>${request.direction==='incoming'?`<div class="friend-row-actions"><button type="button" class="button button-primary button-small" data-respond-friend="${escapeHTML(request.username)}" data-accept="true">Accept</button><button type="button" class="button button-outline button-small" data-respond-friend="${escapeHTML(request.username)}" data-accept="false">Decline</button></div>`:`<span class="friend-pending">Pending</span>`}</article>`).join(''):`<div class="empty-state">No pending friend requests.</div>`;
+  const inviteRows=invites.length?invites.map(invite=>{
+    const other=invite.direction==='incoming'?invite.sender:invite.receiver;
+    const sport=sportById(invite.sportId);
+    const slot=`${sport.label} · Court ${invite.court} · ${dateLabel(invite.date)} · ${timeText(invite.start)}–${timeText(invite.end)}`;
+    return `<article class="friend-row friend-invite-row"><div class="friend-avatar">${escapeHTML(initials(other))}</div><div class="friend-row-info"><strong data-no-translate>${escapeHTML(other)}</strong><span>${escapeHTML(slot)}</span></div>${invite.status==='pending'&&invite.direction==='incoming'?`<div class="friend-row-actions"><button type="button" class="button button-primary button-small" data-respond-play-invite="${escapeHTML(invite.id)}" data-accept="true">Accept</button><button type="button" class="button button-outline button-small" data-respond-play-invite="${escapeHTML(invite.id)}" data-accept="false">Decline</button></div>`:`<span class="friend-pending">${invite.status==='accepted'?'Accepted':invite.status==='declined'?'Declined':'Sent'}</span>`}</article>`;
+  }).join(''):`<div class="empty-state">No play invitations yet.</div>`;
+  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Social play</div><h1>Friends</h1><p>Find friends by username and invite them to play.</p></div><span class="date-pill">${icon('users')} Friend bookings appear in blue.</span></div>
+    <section class="panel friend-add-panel"><div class="panel-heading"><div><h2 class="panel-title">Add friend</h2><p class="panel-subtitle">Find friends by username and invite them to play.</p></div></div><form id="friendRequestForm" class="friend-add-form"><label class="sr-only" for="friendUsername">Friend username</label><input class="input-control" id="friendUsername" name="username" autocomplete="off" required placeholder="Friend username"><button class="button button-primary" type="submit">Send request ${icon('arrow')}</button></form><div id="friendPageError"></div></section>
+    <div class="friend-columns"><section class="panel"><div class="panel-heading"><div><h2 class="panel-title">Your friends</h2><p class="panel-subtitle">Friends · ${friends.length}</p></div></div><div class="friend-list">${friendRows}</div></section><section class="panel"><div class="panel-heading"><div><h2 class="panel-title">Friend requests</h2><p class="panel-subtitle">Incoming and outgoing requests</p></div></div><div class="friend-list">${requestRows}</div></section></div>
+    <section class="panel friend-invites-panel"><div class="panel-heading"><div><h2 class="panel-title">Play invitations</h2><p class="panel-subtitle">Court bookings your friends have invited you to join</p></div></div><div class="friend-list">${inviteRows}</div></section>`;
   translateUI($('#main'));
 }
 
@@ -745,10 +819,10 @@ function renderAdminCourts() {
   })).join('')}</div>`;
 }
 function renderAdminEquipment() {
-  const sport=sportById(state.adminSportId),items=equipmentRecords(sport.id),counts={idle:0,own:0,others:0,broken:0};
+  const sport=sportById(state.adminSportId),items=equipmentRecords(sport.id),counts={idle:0,own:0,others:0,friend:0,broken:0};
   items.forEach(item=>counts[equipmentStatus(item,state.adminDate)]++);
   const filtered=items.filter(item=>{
-    const status=equipmentStatus(item,state.adminDate),statusMatch=state.adminEquipmentFilter==='all'||(state.adminEquipmentFilter==='booked'?['own','others'].includes(status):status===state.adminEquipmentFilter);
+    const status=equipmentStatus(item,state.adminDate),statusMatch=state.adminEquipmentFilter==='all'||(state.adminEquipmentFilter==='booked'?['own','others','friend'].includes(status):status===state.adminEquipmentFilter);
     return statusMatch&&(!state.adminEquipmentSearch||item.id.toLowerCase().includes(state.adminEquipmentSearch.toLowerCase()));
   });
   const cards=filtered.map((item,i)=>{
@@ -756,7 +830,7 @@ function renderAdminEquipment() {
     const pickup=booking?.pickedUpAt?`Picked up ${escapeHTML(booking.pickedUpAt)}`:booking?`Awaiting pickup · ${timeText(booking.time)}`:'';
     return `<article class="equipment-card admin-equipment-card"><div class="equipment-visual">${equipmentSvg(sport.id,i)}</div><div class="equipment-info"><div class="equipment-name">${escapeHTML(item.name)}</div><div class="equipment-serial">Serial · ${item.id}</div></div><div class="equipment-status status-${status}"><i class="status-mini-dot"></i>${escapeHTML(statusText(status))}</div>${pickup?`<div class="admin-pickup-state">${pickup}</div>`:''}<button class="button button-outline button-small admin-manage-equipment" type="button" data-manage-equipment="${item.id}" data-sport="${sport.id}">Manage status</button></article>`;
   }).join('');
-  return `<div class="management-equipment-toolbar"><select class="select-control" id="adminSport" aria-label="Equipment sport">${sports.map(s=>`<option value="${s.id}" ${s.id===sport.id?'selected':''}>${escapeHTML(s.label)}</option>`).join('')}</select><input class="input-control" id="adminEquipmentSearch" type="search" placeholder="Search serial…" aria-label="Search equipment serial" value="${escapeHTML(state.adminEquipmentSearch)}"><select class="select-control" id="adminEquipmentFilter" aria-label="Filter equipment status"><option value="all" ${state.adminEquipmentFilter==='all'?'selected':''}>All status</option><option value="idle" ${state.adminEquipmentFilter==='idle'?'selected':''}>Idle</option><option value="booked" ${state.adminEquipmentFilter==='booked'?'selected':''}>Booked</option><option value="broken" ${state.adminEquipmentFilter==='broken'?'selected':''}>Broken</option></select></div><div class="status-summary"><span><i></i><b>${counts.idle}</b> idle</span><span><i class="s-red"></i><b>${counts.own+counts.others}</b> booked</span><span><i class="s-danger"></i><b>${counts.broken}</b> broken</span></div><div class="equipment-grid management-equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this filter.</div>'}</div>`;
+  return `<div class="management-equipment-toolbar"><select class="select-control" id="adminSport" aria-label="Equipment sport">${sports.map(s=>`<option value="${s.id}" ${s.id===sport.id?'selected':''}>${escapeHTML(s.label)}</option>`).join('')}</select><input class="input-control" id="adminEquipmentSearch" type="search" placeholder="Search serial…" aria-label="Search equipment serial" value="${escapeHTML(state.adminEquipmentSearch)}"><select class="select-control" id="adminEquipmentFilter" aria-label="Filter equipment status"><option value="all" ${state.adminEquipmentFilter==='all'?'selected':''}>All status</option><option value="idle" ${state.adminEquipmentFilter==='idle'?'selected':''}>Idle</option><option value="booked" ${state.adminEquipmentFilter==='booked'?'selected':''}>Booked</option><option value="broken" ${state.adminEquipmentFilter==='broken'?'selected':''}>Broken</option></select></div><div class="status-summary"><span><i></i><b>${counts.idle}</b> idle</span><span><i class="s-red"></i><b>${counts.own+counts.others+counts.friend}</b> booked</span><span><i class="s-danger"></i><b>${counts.broken}</b> broken</span></div><div class="equipment-grid management-equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this filter.</div>'}</div>`;
 }
 
 function renderSettings() {
@@ -797,7 +871,7 @@ function render() {
   if (protectedRoutes.has(state.route) && !currentUser()) { state.intendedRoute = state.route; state.route = 'login'; }
   if (['adminUsers','parkAdmin'].includes(state.route) && !isAdmin()) state.route = currentUser() ? 'home' : 'login';
   applyTheme(); renderNavigation(); renderTopbar();
-  const views={home:renderHome,courts:renderCourts,courtDetail:renderCourtDetail,equipment:renderEquipment,equipmentDetail:renderEquipment,settings:renderSettings,login:renderLogin,register:renderRegister,adminUsers:renderAdminUsers,parkAdmin:renderParkAdmin};
+  const views={home:renderHome,courts:renderCourts,courtDetail:renderCourtDetail,equipment:renderEquipment,equipmentDetail:renderEquipment,settings:renderSettings,friends:renderFriends,login:renderLogin,register:renderRegister,adminUsers:renderAdminUsers,parkAdmin:renderParkAdmin};
   (views[state.route]||renderHome)();
   translateUI($('#sidebar')); translateUI($('#topbar')); translateUI($('#mobileNav'));
   document.title=translateText('Benjakitti Active — Park sports, made easier');
@@ -810,13 +884,13 @@ function courtBookingModal(sportId,court,date=state.selectedDate,defaultStart=nu
 function equipmentBookingModal(item) {
   const status=equipmentStatus(item,state.equipmentDate), sport=sportById(item.sportId);
   const booking=data.equipmentBookings.find(b=>b.equipmentId===item.id&&b.date===state.equipmentDate&&b.user===data.currentUser);
-  const descriptions={idle:'This item is available. Choose when you would like to pick it up.',others:'This item is currently booked by another park user.',own:`You have reserved this item for ${timeText(booking?.time||480)} on ${dateLabel(booking?.date||state.equipmentDate)}.`,broken:'This item has been reported broken and cannot be reserved.'};
+  const descriptions={idle:'This item is available. Choose when you would like to pick it up.',others:'This item is currently booked by another park user.',friend:'A friend has booked this item.',own:`You have reserved this item for ${timeText(booking?.time||480)} on ${dateLabel(booking?.date||state.equipmentDate)}.`,broken:'This item has been reported broken and cannot be reserved.'};
   const actions=status==='own'?`<div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Keep booking</button><button class="button button-danger" type="button" data-cancel-equipment="${item.id}">Cancel reservation</button></div>`:status==='idle'?`<form id="equipmentBookingForm" class="form-stack"><input type="hidden" name="equipmentId" value="${item.id}"><div class="form-field"><label for="equipmentBookingDate">Receive date</label><input id="equipmentBookingDate" name="date" type="date" min="${todayISO()}" value="${escapeHTML(state.equipmentDate)}" required></div><div class="form-field"><label for="equipmentBookingTime">Receive time</label><select id="equipmentBookingTime" name="time">${timeOptions(420,1230).map(t=>`<option value="${t}">${timeText(t)}</option>`).join('')}</select></div><div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">Reserve equipment</button></div></form>`:`<div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Close</button></div>`;
   openModal(`<div class="modal-head"><div><div class="eyebrow">${escapeHTML(sport.label)} equipment</div><h2 class="modal-title">${escapeHTML(item.name)} · ${item.id}</h2><p class="modal-copy">Reservation status for ${escapeHTML(dateLabel(state.equipmentDate))}.</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div><div class="equipment-modal-status status-${status}">${escapeHTML(statusText(status))}</div><p class="modal-copy" style="margin-bottom:16px">${escapeHTML(descriptions[status])}</p><div id="equipmentModalError"></div>${actions}`);
 }
 function equipmentAdminModal(item) {
   const date=state.adminDate,booking=data.equipmentBookings.find(b=>b.equipmentId===item.id&&b.date===date);
-  const current=equipmentStatus(item,date),selected=['own','others'].includes(current)?'booked':current;
+  const current=equipmentStatus(item,date),selected=['own','others','friend'].includes(current)?'booked':current;
   const users=[...data.users].sort((a,b)=>a.username.localeCompare(b.username,undefined,{sensitivity:'base'}));
   const assigned=booking?.user||users.find(u=>u.role==='user')?.username||users[0]?.username||'';
   const pickupTime=booking?.time??480;
@@ -824,7 +898,13 @@ function equipmentAdminModal(item) {
 }
 function courtBookingInfoModal(booking) {
   const sport=sportById(booking.sportId), mine=booking.user===data.currentUser;
-  openModal(`<div class="modal-head"><div><div class="eyebrow">Queue details</div><h2 class="modal-title">${escapeHTML(sport.label)} · Court ${booking.court}</h2><p class="modal-copy">${escapeHTML(dateLabel(booking.date))}</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div><div class="tooltip-card"><div class="tooltip-user"><span data-no-translate>${escapeHTML(booking.user.slice(0,4).toUpperCase())}</span>${mine?' · Your queue':''}</div><div class="tooltip-time">${timeText(booking.start)} – ${timeText(booking.end)}</div></div>${mine?`<div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Keep queue</button><button class="button button-danger" type="button" data-cancel-court="${escapeHTML(booking.id)}">Delete queue</button></div>`:`<div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Close</button></div>`}`);
+  openModal(`<div class="modal-head"><div><div class="eyebrow">Queue details</div><h2 class="modal-title">${escapeHTML(sport.label)} · Court ${booking.court}</h2><p class="modal-copy">${escapeHTML(dateLabel(booking.date))}</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div><div class="tooltip-card"><div class="tooltip-user"><span data-no-translate>${escapeHTML(booking.user.slice(0,4).toUpperCase())}</span>${mine?' · Your queue':isFriendBooking(booking)?' · Friend queue':''}</div><div class="tooltip-time">${timeText(booking.start)} – ${timeText(booking.end)}</div></div>${mine?`<div class="modal-actions modal-actions-wrap"><button class="button button-outline" type="button" data-action="invite-play" data-booking-id="${escapeHTML(booking.id)}">Invite to play</button><button class="button button-outline" type="button" data-action="close-modal">Keep queue</button><button class="button button-danger" type="button" data-cancel-court="${escapeHTML(booking.id)}">Delete queue</button></div>`:`<div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Close</button></div>`}`);
+}
+function playInviteModal(booking) {
+  const friends=currentFriends().slice().sort((a,b)=>a.username.localeCompare(b.username,undefined,{sensitivity:'base'}));
+  if(!friends.length) { closeModal();toast('Add a friend before sending a play invitation.',true);return; }
+  const sport=sportById(booking.sportId);
+  openModal(`<div class="modal-head"><div><div class="eyebrow">Court queue invitation</div><h2 class="modal-title">Invite to play</h2><p class="modal-copy">${escapeHTML(sport.label)} · Court ${booking.court} · ${escapeHTML(dateLabel(booking.date))} · ${timeText(booking.start)}–${timeText(booking.end)}</p></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div><form id="playInviteForm" class="form-stack"><input type="hidden" name="bookingId" value="${escapeHTML(booking.id)}"><div class="form-field"><label for="playInviteFriend">Choose a friend</label><select id="playInviteFriend" name="username" required>${friends.map(friend=>`<option value="${escapeHTML(friend.username)}">${escapeHTML(friend.username)}</option>`).join('')}</select></div><div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Cancel</button><button class="button button-primary" type="submit">Send invite</button></div></form>`);
 }
 function userModal(username = null) {
   const user=username?data.users.find(u=>u.username===username):null;
@@ -849,6 +929,40 @@ document.addEventListener('click', async (event) => {
   if(target.dataset.openEquipment) { state.equipmentSportId=target.dataset.openEquipment; state.equipmentFilter='all';state.equipmentSearch='';render();return; }
   if(target.dataset.period) { state.graphPeriod=target.dataset.period;renderHome();requestAnimationFrame(drawActivityChart);return; }
   if(target.dataset.courtBooking) { const booking=data.courtBookings.find(b=>b.id===target.dataset.courtBooking);if(booking)courtBookingInfoModal(booking);return; }
+  if(target.dataset.action==='invite-play') { const booking=data.courtBookings.find(b=>b.id===target.dataset.bookingId);if(booking&&booking.user===data.currentUser)playInviteModal(booking);return; }
+  if(target.dataset.respondFriend) {
+    const username=target.dataset.respondFriend,accept=target.dataset.accept==='true';
+    if(backendConfigured) {
+      try { await remoteRpc('park_respond_friend_request',{p_username:username,p_accept:accept});renderFriends();toast(accept?'You are now friends.':'Friend request declined.'); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
+    const relation=(data.friendships||[]).find(row=>row.requester===username&&row.target===data.currentUser&&row.status==='pending');
+    if(!relation)return;
+    if(accept)relation.status='accepted';else data.friendships=data.friendships.filter(row=>row!==relation);
+    saveData();renderFriends();toast(accept?'You are now friends.':'Friend request declined.');return;
+  }
+  if(target.dataset.removeFriend) {
+    const username=target.dataset.removeFriend;
+    if(backendConfigured) {
+      try { await remoteRpc('park_remove_friend',{p_username:username});renderFriends();toast('Friend removed.'); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
+    data.friendships=data.friendships.filter(row=>row.status!=='accepted'||![row.requester,row.target].includes(username)||![row.requester,row.target].includes(data.currentUser));
+    saveData();renderFriends();toast('Friend removed.');return;
+  }
+  if(target.dataset.respondPlayInvite) {
+    const inviteId=target.dataset.respondPlayInvite,accept=target.dataset.accept==='true';
+    if(backendConfigured) {
+      try { await remoteRpc('park_respond_play_invite',{p_invite_id:inviteId,p_accept:accept});renderFriends();toast(accept?'Invitation accepted.':'Invitation declined.'); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
+    const invite=(data.playInvites||[]).find(row=>row.id===inviteId&&row.receiver===data.currentUser&&row.status==='pending');
+    if(!invite)return;
+    invite.status=accept?'accepted':'declined';saveData();renderFriends();toast(accept?'Invitation accepted.':'Invitation declined.');return;
+  }
   if(target.dataset.equipmentId) { const item=equipmentRecords(state.equipmentSportId).find(x=>x.id===target.dataset.equipmentId);if(item)equipmentBookingModal(item);return; }
   if(target.dataset.action==='close-modal') { closeModal();return; }
   if(target.dataset.action==='backdrop'&&event.target===target) { closeModal();return; }
@@ -936,7 +1050,7 @@ document.addEventListener('click', async (event) => {
       catch(error) { const box=$('#modalRoot #userModalError');if(box)box.innerHTML=`<div class="form-error">${escapeHTML(error.message)}</div>`;else toast(error.message,true); }
       return;
     }
-    data.users=data.users.filter(u=>u.username!==username);data.courtBookings=data.courtBookings.filter(b=>b.user!==username);data.equipmentBookings=data.equipmentBookings.filter(b=>b.user!==username);saveData();closeModal();state.revealedPasswords.delete(username);render();toast('User deleted.');
+    removeLocalUserReferences(username);saveData();closeModal();state.revealedPasswords.delete(username);render();toast('User deleted.');
   }
 });
 
@@ -964,6 +1078,43 @@ document.addEventListener('input', (event) => {
 
 document.addEventListener('submit', async (event) => {
   event.preventDefault(); const form=event.target;
+  if(form.id==='friendRequestForm') {
+    const username=String(new FormData(form).get('username')||'').trim();
+    if(!username) return;
+    if(backendConfigured) {
+      try {
+        const result=await remoteRpc('park_send_friend_request',{p_username:username});
+        renderFriends();toast(result==='accepted'?'You are now friends.':'Friend request sent.');
+      } catch(error) { const box=$('#friendPageError');if(box){box.innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI(box);}else toast(error.message,true); }
+      return;
+    }
+    const target=data.users.find(user=>user.username.toLowerCase()===username.toLowerCase());
+    if(!target){$('#friendPageError').innerHTML='<div class="auth-message">That username was not found.</div>';translateUI($('#friendPageError'));return;}
+    if(target.username===data.currentUser){$('#friendPageError').innerHTML='<div class="auth-message">You cannot add yourself as a friend.</div>';translateUI($('#friendPageError'));return;}
+    const pair=(data.friendships||[]).find(row=>[row.requester,row.target].includes(data.currentUser)&&[row.requester,row.target].includes(target.username));
+    if(pair?.status==='accepted'){ $('#friendPageError').innerHTML='<div class="auth-message">You are already friends with this user.</div>';translateUI($('#friendPageError'));return; }
+    if(pair?.status==='pending') {
+      if(pair.requester===target.username&&pair.target===data.currentUser) { pair.status='accepted';saveData();renderFriends();toast('You are now friends.'); }
+      else { $('#friendPageError').innerHTML='<div class="auth-message">A friend request is already pending.</div>';translateUI($('#friendPageError')); }
+      return;
+    }
+    data.friendships.push({id:`${data.currentUser}:${target.username}`,requester:data.currentUser,target:target.username,status:'pending',createdAt:new Date().toISOString()});
+    saveData();renderFriends();toast('Friend request sent.');return;
+  }
+  if(form.id==='playInviteForm') {
+    const fd=new FormData(form),bookingId=String(fd.get('bookingId')||''),username=String(fd.get('username')||'');
+    if(backendConfigured) {
+      try { await remoteRpc('park_send_play_invite',{p_booking_id:bookingId,p_friend_username:username});closeModal();render();toast('Invitation sent.'); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
+    const booking=data.courtBookings.find(item=>item.id===bookingId&&item.user===data.currentUser);
+    if(!booking||!isFriendUsername(username)){toast('You can only invite an accepted friend to your own court queue.',true);return;}
+    const existing=(data.playInvites||[]).find(invite=>invite.bookingId===bookingId&&invite.receiver===username&&['pending','accepted'].includes(invite.status));
+    if(existing){toast('This friend has already been invited.',true);return;}
+    data.playInvites.push({id:`invite-${Date.now()}`,bookingId,sportId:booking.sportId,court:booking.court,date:booking.date,start:booking.start,end:booking.end,sender:data.currentUser,receiver:username,status:'pending'});
+    saveData();closeModal();render();toast('Invitation sent.');return;
+  }
   if(form.id==='loginForm') {
     const fd=new FormData(form),username=String(fd.get('username')||'').trim(),password=String(fd.get('password')||'');
     if(backendConfigured) {
@@ -1089,7 +1240,7 @@ document.addEventListener('submit', async (event) => {
       } catch(error) { toast(error.message,true); }
       return;
     }
-    const old=user.username;user.username=username;data.currentUser=username;data.courtBookings.forEach(b=>{if(b.user===old)b.user=username;});data.equipmentBookings.forEach(b=>{if(b.user===old)b.user=username;});saveData();render();toast('Username updated.');return;
+    const old=user.username;user.username=username;renameLocalUserReferences(old,username);data.currentUser=username;saveData();render();toast('Username updated.');return;
   }
   if(form.id==='userForm') {
     const fd=new FormData(form),original=String(fd.get('original')||''),username=String(fd.get('username')||'').trim(),password=String(fd.get('password')||''),user=original?data.users.find(u=>u.username===original):null;
@@ -1111,7 +1262,7 @@ document.addEventListener('submit', async (event) => {
     }
     if(user) {
       const old=user.username;user.username=username;if(password)user.password=password;if(isHead()&&old!==data.currentUser&&user.role!=='head')user.role=role;
-      if(old!==username){if(data.currentUser===old)data.currentUser=username;data.courtBookings.forEach(b=>{if(b.user===old)b.user=username;});data.equipmentBookings.forEach(b=>{if(b.user===old)b.user=username;});}
+      if(old!==username){if(data.currentUser===old)data.currentUser=username;renameLocalUserReferences(old,username);}
     } else data.users.push({username,password,phone:'',role:'user'});
     saveData();closeModal();render();toast(user?'User updated.':'User added.');
   }
