@@ -1,5 +1,13 @@
-/* Benjakitti Active prototype. Data is stored in this browser only. */
+/* Benjakitti Active. Configure Supabase for shared, cross-device data. */
 const STORAGE_KEY = 'benjakitti-active-prototype-v1';
+const PREFERENCES_KEY = 'benjakitti-active-preferences-v1';
+const backendConfig = window.PARK_BACKEND_CONFIG || {};
+const backendConfigured = Boolean(backendConfig.supabaseUrl && backendConfig.supabasePublishableKey);
+const backendClient = backendConfigured && window.supabase?.createClient
+  ? window.supabase.createClient(backendConfig.supabaseUrl, backendConfig.supabasePublishableKey)
+  : null;
+let backendReady = false;
+let backendSaveQueue = Promise.resolve();
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const languageLocales = { en: 'en-US', th: 'th-TH', zh: 'zh-CN', ja: 'ja-JP' };
@@ -27,6 +35,14 @@ const uiTranslations = {
   'Changes update availability across this prototype.': ['การเปลี่ยนแปลงจะอัปเดตสถานะในต้นแบบนี้', '更改会更新此原型中的可用状态。', '変更はこのプロトタイプ内の空き状況に反映されます。'],
   'Admin actions are saved in this browser’s prototype data. In a live service, staff changes would sync to every device.': ['การจัดการของผู้ดูแลจะบันทึกไว้ในข้อมูลต้นแบบของเบราว์เซอร์นี้ หากเปิดให้บริการจริง การเปลี่ยนแปลงจะซิงก์ไปยังทุกอุปกรณ์', '管理员操作保存在此浏览器的原型数据中。正式服务中，工作人员的更改会同步到所有设备。', '管理者の操作はこのブラウザーのプロトタイプデータに保存されます。実際のサービスでは全デバイスに同期されます。'],
   'Prototype account data is stored locally in this browser. Password reveal lasts 10 seconds and then hides automatically.': ['ข้อมูลบัญชีตัวอย่างจะจัดเก็บในเบราว์เซอร์นี้ การแสดงรหัสผ่านจะซ่อนกลับโดยอัตโนมัติหลัง 10 วินาที', '原型账户数据仅保存在此浏览器中。密码显示 10 秒后会自动隐藏。', 'プロトタイプのアカウント情報はこのブラウザーに保存されます。パスワードは10秒後に自動で非表示になります。'],
+  'Court schedules and queues are loaded from the shared database.': ['ตารางสนามและคิวโหลดจากฐานข้อมูลส่วนกลาง', '球场时间表和队列已从共享数据库加载。', 'コートのスケジュールと予約状況は共有データベースから読み込まれます。'],
+  'Select an idle item to reserve it. Equipment status is loaded from the shared database.': ['เลือกอุปกรณ์ที่ว่างเพื่อจอง สถานะอุปกรณ์โหลดจากฐานข้อมูลส่วนกลาง', '选择空闲器材进行预约。器材状态已从共享数据库加载。', '空いている用具を選択して予約します。用具の状態は共有データベースから読み込まれます。'],
+  'Changes are saved to the shared database.': ['การเปลี่ยนแปลงบันทึกลงฐานข้อมูลส่วนกลางแล้ว', '更改已保存到共享数据库。', '変更は共有データベースに保存されます。'],
+  'Staff changes are shared across devices.': ['การเปลี่ยนแปลงของเจ้าหน้าที่จะแสดงบนทุกอุปกรณ์', '工作人员的更改会同步到所有设备。', 'スタッフの変更はすべてのデバイスに反映されます。'],
+  'Passwords are managed by secure authentication and can never be viewed. Enter a new password in Manage to reset one.': ['รหัสผ่านจัดการด้วยระบบยืนยันตัวตนที่ปลอดภัยและไม่สามารถดูได้ หากต้องการเปลี่ยน ให้กรอกรหัสผ่านใหม่ในเมนูจัดการ', '密码由安全身份验证系统管理，无法查看。如需重置，请在“管理”中输入新密码。', 'パスワードは安全な認証システムで管理され、表示できません。変更するには「管理」で新しいパスワードを入力してください。'],
+  'Bookings and park equipment are loaded from the shared database. Theme and language preferences stay on this device.': ['รายการจองและอุปกรณ์สวนโหลดจากฐานข้อมูลส่วนกลาง ส่วนธีมและภาษาจะบันทึกไว้ในอุปกรณ์นี้', '预约和公园器材已从共享数据库加载。主题和语言偏好保存在此设备上。', '予約と公園用具の情報は共有データベースから読み込まれます。テーマと言語設定はこのデバイスに保存されます。'],
+  'Reservations are saved to the shared database. Staff changes are visible on other devices.': ['รายการจองบันทึกลงฐานข้อมูลส่วนกลาง การเปลี่ยนแปลงของเจ้าหน้าที่จะแสดงบนอุปกรณ์อื่นด้วย', '预约已保存到共享数据库。工作人员的更改会显示在其他设备上。', '予約は共有データベースに保存されます。スタッフの変更は他のデバイスにも反映されます。'],
+  'Their account and associated reservations will be removed from the shared database.': ['บัญชีและรายการจองที่เกี่ยวข้องจะถูกลบออกจากฐานข้อมูลส่วนกลาง', '该账户及其相关预约将从共享数据库中删除。', 'このアカウントと関連する予約は共有データベースから削除されます。'],
   'For an operational service, the park would connect this interface to a shared booking and maintenance system.': ['หากนำไปใช้งานจริง สวนจะเชื่อมต่อหน้านี้กับระบบจองและบำรุงรักษาส่วนกลาง', '正式运营时，公园会将此界面连接到共享预约和维护系统。', '実際に運用する場合は、共通の予約・メンテナンスシステムに接続します。'],
   'This demo uses sample court schedules and equipment status. Changes are saved in this browser only. It does not send reservations to park staff.': ['เดโมนี้ใช้ตารางสนามและสถานะอุปกรณ์ตัวอย่าง การเปลี่ยนแปลงจะบันทึกในเบราว์เซอร์นี้เท่านั้น และจะไม่ส่งการจองไปยังเจ้าหน้าที่สวน', '此演示使用球场时间表和器材状态示例。更改仅保存在此浏览器中，不会将预约发送给公园工作人员。', 'このデモではコートのスケジュールと用具の状態にサンプルを使用します。変更はこのブラウザーにのみ保存され、スタッフには送信されません。'],
   'Park open · 5:00 AM–9:00 PM': ['สวนเปิด · 5:00–21:00 น.', '公园开放 · 5:00–21:00', '公園開園 · 5:00〜21:00'],
@@ -325,7 +341,15 @@ function initialData() {
     { username: 'admin001', password: '12345678', phone: '', role: 'admin' },
     { username: 'headaccount001', password: 'RVKs2551', phone: '', role: 'head' },
   ];
-  const existing = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; } })();
+  const existing = (() => {
+    try {
+      if (backendConfigured) return JSON.parse(localStorage.getItem(PREFERENCES_KEY) || 'null');
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    } catch { return null; }
+  })();
+  if (backendConfigured) {
+    return { users: [], currentUser: null, theme: existing?.theme || 'system', locale: ['en','th','zh','ja'].includes(existing?.locale) ? existing.locale : 'en', courtBookings: [], equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {} };
+  }
   if (existing && Array.isArray(existing.users) && existing.users.some(u => u.role === 'head')) {
     const users = existing.users;
     if (!users.some(u => u.role === 'admin')) users.unshift(seededUsers[0]);
@@ -361,11 +385,92 @@ if (location.hash.startsWith('#')) {
 }
 
 function saveData() {
+  if (backendConfigured) {
+    localStorage.setItem(PREFERENCES_KEY, JSON.stringify({ theme: data.theme, locale: data.locale }));
+    return;
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ users: data.users, currentUser: data.currentUser, theme: data.theme, locale: data.locale, courtBookings: data.courtBookings, equipmentBookings: data.equipmentBookings, equipmentOverrides: data.equipmentOverrides, courtMaintenance: data.courtMaintenance }));
 }
 function currentUser() { return data.users.find(u => u.username === data.currentUser) || null; }
 function isAdmin() { return ['admin','head'].includes(currentUser()?.role); }
 function isHead() { return currentUser()?.role === 'head'; }
+function usernameLoginEmail(username) {
+  const bytes = new TextEncoder().encode(String(username || '').trim().toLowerCase());
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  const safeName = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  return `user-${safeName}@park-login.invalid`;
+}
+function applyRemoteSnapshot(snapshot) {
+  data.users = (snapshot.users || []).map(user => ({ ...user, password: '' }));
+  data.currentUser = snapshot.currentUser || null;
+  data.courtBookings = snapshot.courtBookings || [];
+  data.equipmentBookings = snapshot.equipmentBookings || [];
+  data.equipmentOverrides = snapshot.equipmentOverrides || {};
+  data.courtMaintenance = snapshot.courtMaintenance || {};
+}
+async function refreshRemoteState() {
+  const { data: snapshot, error } = await backendClient.rpc('park_state_read');
+  if (error) throw error;
+  applyRemoteSnapshot(snapshot || {});
+  backendReady = true;
+}
+function showBackendError(error) {
+  const message = escapeHTML(error?.message || 'The shared database could not be reached.');
+  $('#sidebar').innerHTML = '<div class="brand"><div class="brand-mark">' + icon('leaf') + '</div><div><div class="brand-name">Benjakitti Active</div><div class="brand-sub">Park sports, made easier</div></div></div>';
+  $('#topbar').innerHTML = '';
+  $('#mobileNav').innerHTML = '';
+  $('#main').innerHTML = `<section class="auth-card"><div class="eyebrow">Database connection</div><h1 class="auth-title">Could not load park data</h1><p class="auth-copy">${message}</p><p class="form-hint">Check the Supabase URL, publishable key, database SQL setup, and deployed accounts function.</p></section>`;
+}
+async function initializeApp() {
+  if (!backendConfigured) { render(); return; }
+  if (!backendClient) { showBackendError(new Error('Supabase JavaScript client did not load. Check your internet connection and reload.')); return; }
+  try {
+    const { error: sessionError } = await backendClient.auth.getSession();
+    if (sessionError) throw sessionError;
+    await refreshRemoteState();
+    const preferences = (() => {
+      try { return JSON.parse(localStorage.getItem(PREFERENCES_KEY) || '{}'); }
+      catch { return {}; }
+    })();
+    data.theme = preferences.theme || data.theme;
+    data.locale = ['en','th','zh','ja'].includes(preferences.locale) ? preferences.locale : data.locale;
+    state.locale = data.locale;
+    render();
+    startRemoteRefresh();
+  } catch (error) {
+    console.error('Shared database initialization failed', error);
+    showBackendError(error);
+  }
+}
+async function invokeAccountAction(payload) {
+  const { data: result, error } = await backendClient.functions.invoke('accounts', { body: payload });
+  if (error) {
+    let detail = error.message;
+    try { const body = await error.context?.json?.(); if (body?.error) detail = body.error; } catch { /* Use the SDK error text. */ }
+    throw new Error(detail);
+  }
+  if (result?.error) throw new Error(result.error);
+  return result;
+}
+async function remoteRpc(name, args) {
+  const { data: result, error } = await backendClient.rpc(name, args);
+  if (error) throw error;
+  await refreshRemoteState();
+  return result;
+}
+function startRemoteRefresh() {
+  setInterval(async () => {
+    if (!backendReady || document.hidden || $('#modalRoot').innerHTML.trim()) return;
+    if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+    const before=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance]);
+    try {
+      await refreshRemoteState();
+      const after=JSON.stringify([data.currentUser,data.users,data.courtBookings,data.equipmentBookings,data.equipmentOverrides,data.courtMaintenance]);
+      if(before!==after) render();
+    } catch(error) { console.warn('Could not refresh shared park data',error); }
+  },15000);
+}
 function applyTheme() {
   const dark = data.theme === 'dark' || (data.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark-theme', dark);
@@ -593,6 +698,7 @@ function renderCourts() {
 function courtBookings(sportId, court, date) { return data.courtBookings.filter(b=>b.sportId===sportId&&b.court===court&&b.date===date).sort((a,b)=>a.start-b.start); }
 function renderCourtDetail() {
   const sport=sportById(state.sportId), rows=Array.from({length:sport.courts},(_,i)=>i+1), date=state.selectedDate;
+  const scheduleNote=backendConfigured?'Court schedules and queues are loaded from the shared database.':'Demo schedules help illustrate availability. In a live park service, staff or booking integrations would keep this schedule current.';
   const timelines=rows.map(court=>{
     const bookings=courtBookings(sport.id,court,date);
     const segments=bookings.map(b=>{
@@ -603,12 +709,13 @@ function renderCourtDetail() {
     const activeNow=date===todayISO()&&bookings.some(b=>b.start<=nowMins&&b.end>nowMins), closed=courtIsClosed(sport.id,court);
     return `<article class="court-row ${closed?'court-row-closed':''}"><div class="court-thumb">${courtSvg(sport.id)}</div><div class="court-content"><div class="court-row-head"><div><h2 class="court-title">${escapeHTML(sport.label)} · Court ${court}</h2><div class="court-meta">${bookings.length} booked time${bookings.length===1?'':'s'} on ${escapeHTML(dateLabel(date))}</div></div><span class="court-open-label ${closed?'court-label-closed':''}">${closed?'Out of service':activeNow?'In use now':bookings.length?`${bookings.length} queued`:'Open schedule'}</span></div><div class="timeline-head">${Array.from({length:15},(_,i)=>`<span>${i%2===0?`${i===0?7:7+i}:00`:''}</span>`).join('')}</div><div class="timeline">${segments}</div><div class="court-row-bottom"><div class="timeline-legend"><span><i class="legend-dot"></i>Booked</span><span><i class="legend-dot mine"></i>Your queue</span></div><button class="button button-primary button-small" data-action="open-court-booking" data-sport="${sport.id}" data-court="${court}" ${closed?'disabled':''}>${closed?'Unavailable':`Make a queue ${icon('plus')}`}</button></div></div></article>`;
   }).join('');
-  $('#main').innerHTML = `<div class="page-heading"><div><div class="eyebrow">Court schedule</div><h1>${escapeHTML(sport.label)}</h1><p>Tap a timeline booking for details or choose an open time below.</p></div><button class="button button-outline" data-nav="courts">← All sports</button></div><div class="equipment-toolbar"><p>Daily hours · <strong>7:00 AM – 9:00 PM</strong> · Each block is 30 minutes</p><div class="equipment-filter"><label class="panel-subtitle" for="courtDate">Show date</label><input class="input-control" type="date" id="courtDate" min="${todayISO()}" value="${escapeHTML(date)}"></div></div><div class="court-list">${timelines}</div><p class="footnote">Demo schedules help illustrate availability. In a live park service, staff or booking integrations would keep this schedule current.</p>`;
+  $('#main').innerHTML = `<div class="page-heading"><div><div class="eyebrow">Court schedule</div><h1>${escapeHTML(sport.label)}</h1><p>Tap a timeline booking for details or choose an open time below.</p></div><button class="button button-outline" data-nav="courts">← All sports</button></div><div class="equipment-toolbar"><p>Daily hours · <strong>7:00 AM – 9:00 PM</strong> · Each block is 30 minutes</p><div class="equipment-filter"><label class="panel-subtitle" for="courtDate">Show date</label><input class="input-control" type="date" id="courtDate" min="${todayISO()}" value="${escapeHTML(date)}"></div></div><div class="court-list">${timelines}</div><p class="footnote">${scheduleNote}</p>`;
   translateUI($('#main'));
 }
 
 function renderEquipment() {
   const sport=sportById(state.equipmentSportId), records=equipmentRecords(sport.id), counts={};
+  const equipmentNote=backendConfigured?'Select an idle item to reserve it. Equipment status is loaded from the shared database.':'Select an idle item to reserve it. Equipment status is sample data for this prototype.';
   records.forEach(item=>counts[equipmentStatus(item,state.equipmentDate)]=(counts[equipmentStatus(item,state.equipmentDate)]||0)+1);
   const filtered=records.filter(item=>(state.equipmentFilter==='all'||equipmentStatus(item,state.equipmentDate)===state.equipmentFilter)&&(!state.equipmentSearch||item.id.toLowerCase().includes(state.equipmentSearch.toLowerCase())));
   const cards=filtered.map((item,i)=>{
@@ -617,7 +724,7 @@ function renderEquipment() {
   }).join('');
   $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Equipment desk</div><h1>Borrow equipment</h1><p>See what’s ready to use before you arrive.</p></div><button class="button button-outline" data-nav="home">${icon('home')} Overview</button></div><div class="sport-grid" style="margin-bottom:18px">${sports.map(s=>`<button type="button" class="sport-card" data-open-equipment="${s.id}"><div class="sport-visual" style="min-height:92px">${sportSvg(s.id)}</div><div class="sport-card-body"><h2 class="sport-card-title">${escapeHTML(s.label)}</h2><div class="sport-card-bottom"><span>30 pieces</span><strong>${s.id===sport.id?'Viewing':'See items'} ${icon('arrow')}</strong></div></div></button>`).join('')}</div>
     <div class="equipment-toolbar"><p>Availability for <strong>${escapeHTML(dateLabel(state.equipmentDate))}</strong> · ${escapeHTML(sport.label)} items</p><div class="equipment-filter"><input class="input-control" id="equipmentSearch" type="search" placeholder="Search serial" aria-label="Search equipment serial" value="${escapeHTML(state.equipmentSearch)}"><input class="input-control" id="equipmentDate" type="date" min="${todayISO()}" aria-label="Select equipment date" value="${escapeHTML(state.equipmentDate)}"><select class="select-control" id="equipmentFilter" aria-label="Filter by equipment status"><option value="all" ${state.equipmentFilter==='all'?'selected':''}>All status</option><option value="idle" ${state.equipmentFilter==='idle'?'selected':''}>Idle</option><option value="others" ${state.equipmentFilter==='others'?'selected':''}>Booked by others</option><option value="broken" ${state.equipmentFilter==='broken'?'selected':''}>Broken</option><option value="own" ${state.equipmentFilter==='own'?'selected':''}>Booked by you</option></select></div></div>
-    <div class="status-summary"><span><i></i><b>${counts.idle||0}</b> idle</span><span><i class="s-red"></i><b>${counts.others||0}</b> booked</span><span><i class="s-green"></i><b>${counts.own||0}</b> yours</span><span><i class="s-danger"></i><b>${counts.broken||0}</b> broken</span></div><div class="equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this search.</div>'}</div><p class="footnote">Select an idle item to reserve it. Equipment status is sample data for this prototype.</p>`;
+    <div class="status-summary"><span><i></i><b>${counts.idle||0}</b> idle</span><span><i class="s-red"></i><b>${counts.others||0}</b> booked</span><span><i class="s-green"></i><b>${counts.own||0}</b> yours</span><span><i class="s-danger"></i><b>${counts.broken||0}</b> broken</span></div><div class="equipment-grid">${cards||'<div class="empty-state" style="grid-column:1/-1">No equipment matches this search.</div>'}</div><p class="footnote">${equipmentNote}</p>`;
   translateUI($('#main'));
 }
 
@@ -625,7 +732,9 @@ function renderParkAdmin() {
   if (!isAdmin()) { navigate(currentUser()?'home':'login',{history:false}); return; }
   const courtActive=state.adminTab==='courts';
   const body=courtActive?renderAdminCourts():renderAdminEquipment();
-  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Staff workspace</div><h1>Court & equipment admin</h1><p>Update park availability and handle on-the-day changes.</p></div><span class="role-chip ${isHead()?'head':'admin'}">${escapeHTML(roleName(currentUser().role))}</span></div><div class="panel management-panel"><div class="panel-heading management-heading"><div><h2 class="panel-title">Park operations</h2><p class="panel-subtitle">Changes update availability across this prototype.</p></div><div class="segmented" role="tablist" aria-label="Management area"><button type="button" class="segment-button ${courtActive?'active':''}" role="tab" aria-selected="${courtActive}" data-admin-tab="courts">Courts</button><button type="button" class="segment-button ${!courtActive?'active':''}" role="tab" aria-selected="${!courtActive}" data-admin-tab="equipment">Equipment</button></div></div><div class="management-toolbar"><p>${courtActive?'Court queues and service status':'Equipment status, reservations, and pickup records'}</p><div class="equipment-filter"><label class="panel-subtitle" for="adminDate">Date</label><input class="input-control" type="date" id="adminDate" min="${todayISO()}" value="${escapeHTML(state.adminDate)}"></div></div>${body}</div><p class="footnote">Admin actions are saved in this browser’s prototype data. In a live service, staff changes would sync to every device.</p>`;
+  const operationsNote=backendConfigured?'Changes are saved to the shared database.':'Changes update availability across this prototype.';
+  const staffFootnote=backendConfigured?'Staff changes are shared across devices.':'Admin actions are saved in this browser’s prototype data. In a live service, staff changes would sync to every device.';
+  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Staff workspace</div><h1>Court & equipment admin</h1><p>Update park availability and handle on-the-day changes.</p></div><span class="role-chip ${isHead()?'head':'admin'}">${escapeHTML(roleName(currentUser().role))}</span></div><div class="panel management-panel"><div class="panel-heading management-heading"><div><h2 class="panel-title">Park operations</h2><p class="panel-subtitle">${operationsNote}</p></div><div class="segmented" role="tablist" aria-label="Management area"><button type="button" class="segment-button ${courtActive?'active':''}" role="tab" aria-selected="${courtActive}" data-admin-tab="courts">Courts</button><button type="button" class="segment-button ${!courtActive?'active':''}" role="tab" aria-selected="${!courtActive}" data-admin-tab="equipment">Equipment</button></div></div><div class="management-toolbar"><p>${courtActive?'Court queues and service status':'Equipment status, reservations, and pickup records'}</p><div class="equipment-filter"><label class="panel-subtitle" for="adminDate">Date</label><input class="input-control" type="date" id="adminDate" min="${todayISO()}" value="${escapeHTML(state.adminDate)}"></div></div>${body}</div><p class="footnote">${staffFootnote}</p>`;
   translateUI($('#main'));
 }
 function renderAdminCourts() {
@@ -652,12 +761,15 @@ function renderAdminEquipment() {
 
 function renderSettings() {
   const user=currentUser();
-  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Your preferences</div><h1>Settings</h1><p>Make Benjakitti Active feel right for you.</p></div></div><div class="settings-grid"><section class="setting-card"><h2>Appearance</h2><p>Choose a color theme or match your device’s appearance.</p><div class="setting-row"><div><div class="setting-label">Theme</div><div class="setting-help">Applies on this browser and device.</div></div><select class="select-control" id="themeSelect"><option value="system" ${data.theme==='system'?'selected':''}>Use device setting</option><option value="light" ${data.theme==='light'?'selected':''}>Light</option><option value="dark" ${data.theme==='dark'?'selected':''}>Dark</option></select></div><div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-help">Choose the language used across this website.</div></div><select class="select-control" id="languageSelectSettings" aria-label="Language"><option value="en" ${state.locale==='en'?'selected':''}>English</option><option value="th" ${state.locale==='th'?'selected':''}>ไทย</option><option value="zh" ${state.locale==='zh'?'selected':''}>中文</option><option value="ja" ${state.locale==='ja'?'selected':''}>日本語</option></select></div></section><section class="setting-card"><h2>Account</h2><p>Update your username. Your bookings will stay linked to your account.</p>${user?`<form id="changeUsernameForm" class="form-stack"><div class="form-field"><label for="newUsername">Username</label><input id="newUsername" name="username" value="${escapeHTML(user.username)}" autocomplete="username" required><span class="form-hint">At least 8 characters and one English letter.</span></div><button class="button button-primary" type="submit">Save username</button><button class="button button-outline" type="button" data-action="logout">Log out</button></form>`:`<div class="empty-state"><strong>You’re browsing as a guest</strong>Log in to manage your account and bookings.<br><button class="button button-primary button-small" style="margin-top:11px" data-nav="login">Log in</button></div>`}</section><section class="setting-card"><h2>About this prototype</h2><p>This demo uses sample court schedules and equipment status. Changes are saved in this browser only. It does not send reservations to park staff.</p><div class="notice">${icon('alert')}<span>For an operational service, the park would connect this interface to a shared booking and maintenance system.</span></div></section></div>`;
+  const dataNote=backendConfigured?'Bookings and park equipment are loaded from the shared database. Theme and language preferences stay on this device.':'This demo uses sample court schedules and equipment status. Changes are saved in this browser only. It does not send reservations to park staff.';
+  const integrationNote=backendConfigured?'Reservations are saved to the shared database. Staff changes are visible on other devices.':'For an operational service, the park would connect this interface to a shared booking and maintenance system.';
+  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Your preferences</div><h1>Settings</h1><p>Make Benjakitti Active feel right for you.</p></div></div><div class="settings-grid"><section class="setting-card"><h2>Appearance</h2><p>Choose a color theme or match your device’s appearance.</p><div class="setting-row"><div><div class="setting-label">Theme</div><div class="setting-help">Applies on this browser and device.</div></div><select class="select-control" id="themeSelect"><option value="system" ${data.theme==='system'?'selected':''}>Use device setting</option><option value="light" ${data.theme==='light'?'selected':''}>Light</option><option value="dark" ${data.theme==='dark'?'selected':''}>Dark</option></select></div><div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-help">Choose the language used across this website.</div></div><select class="select-control" id="languageSelectSettings" aria-label="Language"><option value="en" ${state.locale==='en'?'selected':''}>English</option><option value="th" ${state.locale==='th'?'selected':''}>ไทย</option><option value="zh" ${state.locale==='zh'?'selected':''}>中文</option><option value="ja" ${state.locale==='ja'?'selected':''}>日本語</option></select></div></section><section class="setting-card"><h2>Account</h2><p>Update your username. Your bookings will stay linked to your account.</p>${user?`<form id="changeUsernameForm" class="form-stack"><div class="form-field"><label for="newUsername">Username</label><input id="newUsername" name="username" value="${escapeHTML(user.username)}" autocomplete="username" required><span class="form-hint">At least 8 characters and one English letter.</span></div><button class="button button-primary" type="submit">Save username</button><button class="button button-outline" type="button" data-action="logout">Log out</button></form>`:`<div class="empty-state"><strong>You’re browsing as a guest</strong>Log in to manage your account and bookings.<br><button class="button button-primary button-small" style="margin-top:11px" data-nav="login">Log in</button></div>`}</section><section class="setting-card"><h2>About this prototype</h2><p>${dataNote}</p><div class="notice">${icon('alert')}<span>${integrationNote}</span></div></section></div>`;
   translateUI($('#main'));
 }
 
 function renderLogin() {
-  $('#main').innerHTML=`<div class="auth-layout"><section class="auth-card"><div class="auth-brand"><div class="brand-mark">${icon('leaf')}</div><div><div class="brand-name">Benjakitti Active</div><div class="brand-sub">Park sports, made easier</div></div></div><div class="eyebrow">Welcome back</div><h1 class="auth-title">Log in to your account</h1><p class="auth-copy">Sign in to make a court queue or reserve equipment at the park.</p>${state.loginNotice?`<div class="auth-message">${escapeHTML(state.loginNotice)}</div>`:''}${state.loginSuccess?`<div class="auth-message success">${escapeHTML(state.loginSuccess)}</div>`:''}<form class="form-stack" id="loginForm"><div class="form-field"><label for="loginUsername">Username</label><input id="loginUsername" name="username" autocomplete="username" required autofocus></div><div class="form-field"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button button-primary" type="submit">Log in ${icon('arrow')}</button></form><p class="auth-switch">New to the park? <button class="text-button" data-nav="register">Create an account</button></p><div class="demo-accounts"><strong>Prototype admin accounts</strong><br>Admin: admin001 · 12345678<br>Head account: headaccount001 · RVKs2551</div></section></div>`;
+  const demoAccounts=backendConfigured?'':`<div class="demo-accounts"><strong>Prototype admin accounts</strong><br>Admin: admin001 · 12345678<br>Head account: headaccount001 · RVKs2551</div>`;
+  $('#main').innerHTML=`<div class="auth-layout"><section class="auth-card"><div class="auth-brand"><div class="brand-mark">${icon('leaf')}</div><div><div class="brand-name">Benjakitti Active</div><div class="brand-sub">Park sports, made easier</div></div></div><div class="eyebrow">Welcome back</div><h1 class="auth-title">Log in to your account</h1><p class="auth-copy">Sign in to make a court queue or reserve equipment at the park.</p>${state.loginNotice?`<div class="auth-message">${escapeHTML(state.loginNotice)}</div>`:''}${state.loginSuccess?`<div class="auth-message success">${escapeHTML(state.loginSuccess)}</div>`:''}<form class="form-stack" id="loginForm"><div class="form-field"><label for="loginUsername">Username</label><input id="loginUsername" name="username" autocomplete="username" required autofocus></div><div class="form-field"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button button-primary" type="submit">Log in ${icon('arrow')}</button></form><p class="auth-switch">New to the park? <button class="text-button" data-nav="register">Create an account</button></p>${demoAccounts}</section></div>`;
   translateUI($('#main'));
 }
 function renderRegister() {
@@ -667,16 +779,18 @@ function renderRegister() {
 
 function renderAdminUsers() {
   if (!isAdmin()) { navigate(currentUser()?'home':'login',{history:false}); return; }
-  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Administrator access</div><h1>User administration</h1><p>Search accounts and manage park access.</p></div><span class="role-chip ${isHead()?'head':'admin'}">${escapeHTML(roleName(currentUser().role))}</span></div><div class="notice" style="margin-bottom:16px">${icon('alert')}<span>Prototype account data is stored locally in this browser. Password reveal lasts 10 seconds and then hides automatically.</span></div><div class="admin-toolbar"><div class="search-wrap">${icon('search')}<input id="userSearch" type="search" placeholder="Search by username…" value="${escapeHTML(state.userSearch)}" aria-label="Search usernames"></div><button class="button button-primary" data-action="add-user">${icon('plus')} Add user</button></div><div class="table-wrap"><table class="users-table"><thead><tr><th>Username</th><th>Password</th><th>Access</th><th>Telephone</th><th>Manage</th></tr></thead><tbody id="userTableBody">${usersRows()}</tbody></table></div><p class="footnote">Usernames are sorted alphabetically. Head account permissions cannot be changed by an administrator.</p>`;
+  const accountNote=backendConfigured?'Passwords are managed by secure authentication and can never be viewed. Enter a new password in Manage to reset one.':'Prototype account data is stored locally in this browser. Password reveal lasts 10 seconds and then hides automatically.';
+  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Administrator access</div><h1>User administration</h1><p>Search accounts and manage park access.</p></div><span class="role-chip ${isHead()?'head':'admin'}">${escapeHTML(roleName(currentUser().role))}</span></div><div class="notice" style="margin-bottom:16px">${icon('alert')}<span>${accountNote}</span></div><div class="admin-toolbar"><div class="search-wrap">${icon('search')}<input id="userSearch" type="search" placeholder="Search by username…" value="${escapeHTML(state.userSearch)}" aria-label="Search usernames"></div><button class="button button-primary" data-action="add-user">${icon('plus')} Add user</button></div><div class="table-wrap"><table class="users-table"><thead><tr><th>Username</th><th>Password</th><th>Access</th><th>Telephone</th><th>Manage</th></tr></thead><tbody id="userTableBody">${usersRows()}</tbody></table></div><p class="footnote">Usernames are sorted alphabetically. Head account permissions cannot be changed by an administrator.</p>`;
   translateUI($('#main'));
 }
 function usersRows() {
   const users=data.users.filter(u=>u.username.toLowerCase().includes((state.userSearch||'').toLowerCase())).sort((a,b)=>a.username.localeCompare(b.username,undefined,{sensitivity:'base'}));
   if (!users.length) return '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:25px">No matching users.</td></tr>';
   return users.map(u=>{
-    const visible=state.revealedPasswords.has(u.username);
+    const visible=!backendConfigured&&state.revealedPasswords.has(u.username);
     const safe=escapeHTML(u.username);
-    return `<tr><td><strong data-no-translate>${safe}</strong></td><td><span class="password-cell" data-no-translate>${visible?escapeHTML(u.password):'********'}</span> <button type="button" class="password-toggle" aria-label="${visible?'Hide':'Show'} password for ${safe}" data-reveal-password="${safe}">${icon(visible?'eyeOff':'eye')}</button></td><td><span class="role-chip ${u.role==='head'?'head':u.role==='admin'?'admin':''}">${escapeHTML(roleName(u.role))}</span></td><td><span data-no-translate>${escapeHTML(u.phone||'—')}</span></td><td><button type="button" class="button button-outline button-small" data-manage-user="${safe}">Manage</button></td></tr>`;
+    const passwordControl=backendConfigured?'<span class="password-cell" aria-label="Password stored securely">••••••••</span>':`<span class="password-cell" data-no-translate>${visible?escapeHTML(u.password):'********'}</span> <button type="button" class="password-toggle" aria-label="${visible?'Hide':'Show'} password for ${safe}" data-reveal-password="${safe}">${icon(visible?'eyeOff':'eye')}</button>`;
+    return `<tr><td><strong data-no-translate>${safe}</strong></td><td>${passwordControl}</td><td><span class="role-chip ${u.role==='head'?'head':u.role==='admin'?'admin':''}">${escapeHTML(roleName(u.role))}</span></td><td><span data-no-translate>${escapeHTML(u.phone||'—')}</span></td><td><button type="button" class="button button-outline button-small" data-manage-user="${safe}">Manage</button></td></tr>`;
   }).join('');
 }
 function render() {
@@ -728,7 +842,7 @@ function setRegisterError(field,message) {
   el.innerHTML=message?`<div class="form-error">${escapeHTML(message)}</div>`:'';group.classList.toggle('field-error',!!message);translateUI(el);
 }
 
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
   const target=event.target.closest('button,[data-court-booking],[data-equipment-id],[data-action]'); if(!target)return;
   if(target.hasAttribute('data-nav')) { navigate(target.dataset.nav); return; }
   if(target.dataset.openCourts) { navigate('courtDetail',{sportId:target.dataset.openCourts}); return; }
@@ -739,11 +853,27 @@ document.addEventListener('click', (event) => {
   if(target.dataset.action==='close-modal') { closeModal();return; }
   if(target.dataset.action==='backdrop'&&event.target===target) { closeModal();return; }
   if(target.dataset.action==='login') { navigate('login');return; }
-  if(target.dataset.action==='logout') { data.currentUser=null;saveData();toast('You have logged out.');navigate('home');return; }
+  if(target.dataset.action==='logout') {
+    if(backendConfigured) {
+      const { error } = await backendClient.auth.signOut();
+      if(error) { toast(error.message,true); return; }
+    }
+    data.currentUser=null;
+    if(!backendConfigured) saveData();
+    toast('You have logged out.');navigate('home');return;
+  }
   if(target.dataset.action==='notifications') { toast('You’re all caught up.');return; }
   if(target.dataset.adminTab) { state.adminTab=target.dataset.adminTab;renderParkAdmin();return; }
   if(target.dataset.toggleCourt) {
     const key=target.dataset.toggleCourt;
+    if(backendConfigured) {
+      const courtParts=key.split('-'),courtText=courtParts.pop(),sportId=courtParts.join('-');
+      try {
+        await remoteRpc('park_admin_set_court_status',{p_sport_id:sportId,p_court_number:Number(courtText),p_closed:!data.courtMaintenance[key]});
+        renderParkAdmin();toast(data.courtMaintenance[key]?'Court marked out of service.':'Court reopened.');
+      } catch(error) { toast(error.message,true); }
+      return;
+    }
     if(data.courtMaintenance[key]) delete data.courtMaintenance[key]; else data.courtMaintenance[key]=true;
     saveData();renderParkAdmin();toast(data.courtMaintenance[key]?'Court marked out of service.':'Court reopened.');return;
   }
@@ -752,6 +882,11 @@ document.addEventListener('click', (event) => {
     openModal(`<div class="modal-head"><div><div class="eyebrow">Staff action</div><h2 class="modal-title">Release this court queue?</h2><p class="modal-copy">${escapeHTML(sportById(booking.sportId).label)} · Court ${booking.court}, ${timeText(booking.start)}–${timeText(booking.end)} · ${escapeHTML(booking.user)}.</p></div><button class="modal-close" type="button" data-action="close-modal">×</button></div><div class="modal-actions"><button class="button button-outline" type="button" data-action="close-modal">Keep queue</button><button class="button button-danger" type="button" data-confirm-release-court="${escapeHTML(booking.id)}">Release queue</button></div>`);return;
   }
   if(target.dataset.confirmReleaseCourt) {
+    if(backendConfigured) {
+      try { await remoteRpc('park_delete_court_booking',{p_booking_id:target.dataset.confirmReleaseCourt});closeModal();renderParkAdmin();toast('Court queue released.'); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
     data.courtBookings=data.courtBookings.filter(b=>b.id!==target.dataset.confirmReleaseCourt);saveData();closeModal();renderParkAdmin();toast('Court queue released.');return;
   }
   if(target.dataset.manageEquipment) {
@@ -771,20 +906,36 @@ document.addEventListener('click', (event) => {
   if(target.dataset.cancelCourt) {
     const booking=data.courtBookings.find(b=>b.id===target.dataset.cancelCourt);
     if(!booking||booking.user!==data.currentUser)return;
+    if(backendConfigured) {
+      try { await remoteRpc('park_delete_court_booking',{p_booking_id:booking.id});closeModal();toast('Your court queue was deleted.');render(); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
     data.courtBookings=data.courtBookings.filter(b=>b.id!==booking.id);saveData();closeModal();toast('Your court queue was deleted.');render();return;
   }
   if(target.dataset.cancelEquipment) {
     const itemId=target.dataset.cancelEquipment;
+    if(backendConfigured) {
+      try { await remoteRpc('park_cancel_equipment_booking',{p_equipment_id:itemId,p_booking_date:state.equipmentDate});closeModal();toast('Your equipment reservation was cancelled.');render(); }
+      catch(error) { toast(error.message,true); }
+      return;
+    }
     data.equipmentBookings=data.equipmentBookings.filter(b=>!(b.equipmentId===itemId&&b.date===state.equipmentDate&&b.user===data.currentUser));saveData();closeModal();toast('Your equipment reservation was cancelled.');render();return;
   }
   if(target.dataset.deleteUser) {
     const username=target.dataset.deleteUser,user=data.users.find(u=>u.username===username);
     if(!user||username===data.currentUser||user.role==='head'&&!isHead()) { $('#userModalError').innerHTML='<div class="form-error">This account cannot be deleted.</div>';return; }
-    openModal(`<div class="modal-head"><div><div class="eyebrow">Confirm deletion</div><h2 class="modal-title">Delete ${escapeHTML(username)}?</h2><p class="modal-copy">Their account and demo bookings will be removed from this browser.</p></div><button class="modal-close" data-action="close-modal">×</button></div><div class="modal-actions"><button class="button button-outline" data-action="edit-user-back" data-username="${escapeHTML(username)}">Go back</button><button class="button button-danger" data-confirm-delete="${escapeHTML(username)}">Delete user</button></div>`);return;
+    const deleteNote=backendConfigured?'Their account and associated reservations will be removed from the shared database.':'Their account and demo bookings will be removed from this browser.';
+    openModal(`<div class="modal-head"><div><div class="eyebrow">Confirm deletion</div><h2 class="modal-title">Delete ${escapeHTML(username)}?</h2><p class="modal-copy">${deleteNote}</p></div><button class="modal-close" data-action="close-modal">×</button></div><div class="modal-actions"><button class="button button-outline" data-action="edit-user-back" data-username="${escapeHTML(username)}">Go back</button><button class="button button-danger" data-confirm-delete="${escapeHTML(username)}">Delete user</button></div>`);translateUI($('#modalRoot'));return;
   }
   if(target.dataset.action==='edit-user-back') { userModal(target.dataset.username);return; }
   if(target.dataset.confirmDelete) {
     const username=target.dataset.confirmDelete;
+    if(backendConfigured) {
+      try { await invokeAccountAction({action:'delete',username});await refreshRemoteState();closeModal();render();toast('User deleted.'); }
+      catch(error) { const box=$('#modalRoot #userModalError');if(box)box.innerHTML=`<div class="form-error">${escapeHTML(error.message)}</div>`;else toast(error.message,true); }
+      return;
+    }
     data.users=data.users.filter(u=>u.username!==username);data.courtBookings=data.courtBookings.filter(b=>b.user!==username);data.equipmentBookings=data.equipmentBookings.filter(b=>b.user!==username);saveData();closeModal();state.revealedPasswords.delete(username);render();toast('User deleted.');
   }
 });
@@ -811,10 +962,22 @@ document.addEventListener('input', (event) => {
   if(el.id==='adminEquipmentSearch') { state.adminEquipmentSearch=el.value;renderParkAdmin();const search=$('#adminEquipmentSearch');search?.focus();search?.setSelectionRange(search.value.length,search.value.length); }
 });
 
-document.addEventListener('submit', (event) => {
+document.addEventListener('submit', async (event) => {
   event.preventDefault(); const form=event.target;
   if(form.id==='loginForm') {
     const fd=new FormData(form),username=String(fd.get('username')||'').trim(),password=String(fd.get('password')||'');
+    if(backendConfigured) {
+      const { error } = await backendClient.auth.signInWithPassword({email:usernameLoginEmail(username),password});
+      if(error) { state.loginNotice='That username and password combination could not be found.';renderLogin();return; }
+      try {
+        await refreshRemoteState();
+        if(!currentUser()) throw new Error('This account does not have a park profile. Ask an administrator to restore access.');
+      } catch(error) {
+        await backendClient.auth.signOut();
+        state.loginNotice=error.message;renderLogin();return;
+      }
+      const destination=state.intendedRoute||'home';state.intendedRoute='home';toast(`Welcome, ${data.currentUser}.`);navigate(destination);return;
+    }
     const user=data.users.find(u=>u.username.toLowerCase()===username.toLowerCase()&&u.password===password);
     if(!user) { state.loginNotice='That username and password combination could not be found.';renderLogin();return; }
     data.currentUser=user.username;saveData();const destination=state.intendedRoute||'home';state.intendedRoute='home';toast(`Welcome, ${user.username}.`);navigate(destination);return;
@@ -823,10 +986,23 @@ document.addEventListener('submit', (event) => {
     const fd=new FormData(form),username=String(fd.get('username')||'').trim(),password=String(fd.get('password')||''),phone=String(fd.get('phone')||'').trim();
     let valid=true;setRegisterError('username','');setRegisterError('password','');$('#registerMessage').innerHTML='';
     if(!isUsernameValid(username)){setRegisterError('username','Use at least 8 characters and include an English letter.');valid=false;}
-    else if(!usernameAvailable(username)){setRegisterError('username','That username is already registered. Choose another.');valid=false;}
+    else if(!backendConfigured&&!usernameAvailable(username)){setRegisterError('username','That username is already registered. Choose another.');valid=false;}
     if(!isPasswordValid(password)){setRegisterError('password','Use at least 8 characters, including uppercase, lowercase, and a number.');valid=false;}
     if(phone&&!/^[+0-9()\-\s]{8,20}$/.test(phone)){ $('#registerMessage').innerHTML='<div class="auth-message">Enter a valid telephone number or leave this field blank.</div>';translateUI($('#registerMessage'));valid=false; }
     if(!valid)return;
+    if(backendConfigured) {
+      try {
+        await invokeAccountAction({action:'register',username,password,phone});
+        const { error }=await backendClient.auth.signInWithPassword({email:usernameLoginEmail(username),password});
+        if(error) throw error;
+        await refreshRemoteState();
+        toast('Your account is ready.');navigate(state.intendedRoute||'home');state.intendedRoute='home';
+      } catch(error) {
+        if(/already registered|already in use|duplicate/i.test(error.message)) setRegisterError('username','That username is already registered. Choose another.');
+        else { $('#registerMessage').innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI($('#registerMessage')); }
+      }
+      return;
+    }
     data.users.push({username,password,phone,role:'user'});data.currentUser=username;saveData();toast('Your account is ready.');navigate(state.intendedRoute||'home');state.intendedRoute='home';return;
   }
   if(form.id==='courtBookingForm') {
@@ -839,6 +1015,13 @@ document.addEventListener('submit', (event) => {
     else if(date===todayISO()&&start<new Date().getHours()*60+new Date().getMinutes())message='That start time has already passed. Choose a future time.';
     else if(courtBookings(sportId,court,date).some(b=>start<b.end&&end>b.start))message='That time overlaps another queue. Please choose a different time.';
     if(message){$('#courtModalError').innerHTML=`<div class="auth-message">${escapeHTML(message)}</div>`;translateUI($('#courtModalError'));return;}
+    if(backendConfigured) {
+      try {
+        await remoteRpc('park_make_court_booking',{p_sport_id:sportId,p_court_number:court,p_booking_date:date,p_start_minute:start,p_end_minute:end});
+        closeModal();state.selectedDate=date;state.sportId=sportId;state.route='courtDetail';render();toast('Court queue confirmed.');
+      } catch(error) { $('#courtModalError').innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI($('#courtModalError')); }
+      return;
+    }
     data.courtBookings.push({id:`q-${Date.now()}`,sportId,court,date,start,end,user:data.currentUser});saveData();closeModal();state.selectedDate=date;state.sportId=sportId;state.route='courtDetail';render();toast('Court queue confirmed.');return;
   }
   if(form.id==='equipmentBookingForm') {
@@ -850,11 +1033,33 @@ document.addEventListener('submit', (event) => {
     else if(!item||equipmentStatus(item,date)!=='idle')message=`This item is ${statusText(item?equipmentStatus(item,date):'broken')} and cannot be reserved.`;
     else if(data.equipmentBookings.some(b=>b.equipmentId===equipmentId&&b.date===date))message='That equipment is already reserved for this date.';
     if(message){$('#equipmentModalError').innerHTML=`<div class="auth-message">${escapeHTML(message)}</div>`;translateUI($('#equipmentModalError'));return;}
+    if(backendConfigured) {
+      try {
+        await remoteRpc('park_make_equipment_booking',{p_equipment_id:equipmentId,p_booking_date:date,p_pickup_minute:time});
+        state.equipmentDate=date;closeModal();render();toast('Equipment reserved.');
+      } catch(error) { $('#equipmentModalError').innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI($('#equipmentModalError')); }
+      return;
+    }
     data.equipmentBookings.push({id:`e-${Date.now()}`,equipmentId,sportId:state.equipmentSportId,date,time,user:data.currentUser});saveData();state.equipmentDate=date;closeModal();render();toast('Equipment reserved.');return;
   }
   if(form.id==='adminEquipmentForm') {
     const fd=new FormData(form),equipmentId=String(fd.get('equipmentId')),status=String(fd.get('status')),date=String(fd.get('date')||state.adminDate),item=equipmentRecords(state.adminSportId).find(x=>x.id===equipmentId);
     if(!item){$('#adminEquipmentError').innerHTML='<div class="auth-message">Equipment item could not be found.</div>';translateUI($('#adminEquipmentError'));return;}
+    if(backendConfigured) {
+      const time=Number(fd.get('time')),pickedUpAt=String(fd.get('pickedUpAt')||'');
+      try {
+        await remoteRpc('park_admin_set_equipment_status',{
+          p_equipment_id:equipmentId,p_status:status,
+          p_username:status==='booked'?String(fd.get('user')||''):null,
+          p_booking_date:status==='booked'?date:null,
+          p_pickup_minute:status==='booked'?time:null,
+          p_admin_date:state.adminDate,
+          p_picked_up_at:status==='booked'&&pickedUpAt?pickedUpAt:null,
+        });
+        closeModal();renderParkAdmin();toast(status==='booked'?'Reservation and pickup details saved.':status==='broken'?'Equipment marked broken; reservations released.':'Equipment marked available; today’s reservation released.');
+      } catch(error) { $('#adminEquipmentError').innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI($('#adminEquipmentError')); }
+      return;
+    }
     if(status==='booked') {
       const user=String(fd.get('user')||''),time=Number(fd.get('time')),pickedUpAt=String(fd.get('pickedUpAt')||'');
       if(!data.users.some(u=>u.username===user)){ $('#adminEquipmentError').innerHTML='<div class="auth-message">Choose a valid account for this reservation.</div>';translateUI($('#adminEquipmentError'));return; }
@@ -877,6 +1082,13 @@ document.addEventListener('submit', (event) => {
     if(!user)return;
     if(!isUsernameValid(username)){toast('Use at least 8 characters and include an English letter.',true);return;}
     if(!usernameAvailable(username,user.username)){toast('That username is already in use.',true);return;}
+    if(backendConfigured) {
+      try {
+        await invokeAccountAction({action:'update',original:user.username,username,phone:user.phone||'',password:'',role:user.role});
+        await refreshRemoteState();render();toast('Username updated.');
+      } catch(error) { toast(error.message,true); }
+      return;
+    }
     const old=user.username;user.username=username;data.currentUser=username;data.courtBookings.forEach(b=>{if(b.user===old)b.user=username;});data.equipmentBookings.forEach(b=>{if(b.user===old)b.user=username;});saveData();render();toast('Username updated.');return;
   }
   if(form.id==='userForm') {
@@ -888,6 +1100,15 @@ document.addEventListener('submit', (event) => {
     else if(password&&!isPasswordValid(password))message='Password needs 8+ characters, uppercase, lowercase, and a number.';
     else if(user?.role==='head'&&!isHead())message='Only the head account can change this account.';
     if(message){$('#userModalError').innerHTML=`<div class="auth-message">${escapeHTML(message)}</div>`;translateUI($('#userModalError'));return;}
+    if(backendConfigured) {
+      try {
+        await invokeAccountAction({action:user?'update':'create',original:original||undefined,username,password,phone:user?.phone||'',role});
+        await refreshRemoteState();closeModal();render();toast(user?'User updated.':'User added.');
+      } catch(error) {
+        const box=$('#userModalError');if(box){box.innerHTML=`<div class="auth-message">${escapeHTML(error.message)}</div>`;translateUI(box);}else toast(error.message,true);
+      }
+      return;
+    }
     if(user) {
       const old=user.username;user.username=username;if(password)user.password=password;if(isHead()&&old!==data.currentUser&&user.role!=='head')user.role=role;
       if(old!==username){if(data.currentUser===old)data.currentUser=username;data.courtBookings.forEach(b=>{if(b.user===old)b.user=username;});data.equipmentBookings.forEach(b=>{if(b.user===old)b.user=username;});}
@@ -897,4 +1118,4 @@ document.addEventListener('submit', (event) => {
 });
 
 window.addEventListener('resize', () => { if(state.route==='home') requestAnimationFrame(drawActivityChart); });
-render();
+initializeApp();
