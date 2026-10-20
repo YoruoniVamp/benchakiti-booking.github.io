@@ -564,7 +564,7 @@ function navButton(route, label, iconName, active, extra = '') {
 }
 function renderNavigation() {
   const active = state.route === 'courtDetail' ? 'courts' : state.route === 'equipmentDetail' ? 'equipment' : state.route;
-  const items = [navButton('home','Overview','home',active === 'home'),navButton('courts','Book a court','court',active === 'courts'),navButton('equipment','Equipment','equipment',active === 'equipment'),...(currentUser()?[navButton('friends','Friends','users',active === 'friends')]:[]),navButton('settings','Settings','settings',active === 'settings')];
+  const items = [navButton('home','Overview','home',active === 'home'),navButton('courts','Book a court','court',active === 'courts'),navButton('equipment','Equipment','equipment',active === 'equipment'),navButton('friends','Friends','users',active === 'friends'),navButton('settings','Settings','settings',active === 'settings')];
   const admin = isAdmin() ? `${navButton('parkAdmin','Park management','equipment',active === 'parkAdmin')}${navButton('adminUsers','User administration','users',active === 'adminUsers')}` : '';
   const user = currentUser();
   $('#sidebar').innerHTML = `<div class="brand"><div class="brand-mark">${icon('leaf')}</div><div><div class="brand-name">Benjakitti Active</div><div class="brand-sub">Park sports, made easier</div></div></div>
@@ -572,7 +572,7 @@ function renderNavigation() {
     <div class="sidebar-bottom"><div class="park-card"><div class="park-card-label">A little more active</div><div class="park-card-title">Find your time<br>to play.</div><div class="park-card-meta">Live park availability · Bangkok</div></div>
       <div class="profile-row"><div class="avatar">${escapeHTML(initials(user?.username || 'Guest'))}</div><div class="profile-info"><div class="profile-name" data-no-translate>${escapeHTML(user?.username || 'Guest visitor')}</div><div class="profile-role">${escapeHTML(user ? roleName(user.role) : 'Browse as a guest')}</div></div><button class="profile-menu" type="button" aria-label="${user ? 'Log out' : 'Log in'}" data-action="${user ? 'logout' : 'login'}">${icon(user ? 'logout' : 'arrow')}</button></div>
     </div>`;
-  $('#mobileNav').innerHTML = `${navButton('home','Home','home',active === 'home')}${navButton('courts','Courts','court',active === 'courts')}${navButton('equipment','Equipment','equipment',active === 'equipment')}${currentUser()?navButton('friends','Friends','users',active === 'friends'):''}${navButton('settings','Settings','settings',active === 'settings')}${isAdmin() ? navButton('parkAdmin','Manage','equipment',active === 'parkAdmin','admin-mobile') : ''}${isAdmin() ? navButton('adminUsers','Users','users',active === 'adminUsers','admin-mobile') : ''}`;
+  $('#mobileNav').innerHTML = `${navButton('home','Home','home',active === 'home')}${navButton('courts','Courts','court',active === 'courts')}${navButton('equipment','Equipment','equipment',active === 'equipment')}${navButton('friends','Friends','users',active === 'friends')}${navButton('settings','Settings','settings',active === 'settings')}${isAdmin() ? navButton('parkAdmin','Manage','equipment',active === 'parkAdmin','admin-mobile') : ''}${isAdmin() ? navButton('adminUsers','Users','users',active === 'adminUsers','admin-mobile') : ''}`;
 }
 function renderTopbar() {
   const user = currentUser();
