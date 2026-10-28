@@ -11,6 +11,7 @@ let backendSaveQueue = Promise.resolve();
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const languageLocales = { en: 'en-US', th: 'th-TH', zh: 'zh-CN', ja: 'ja-JP' };
+const validFontSize = value => ['old','current','large'].includes(value) ? value : 'current';
 const uiTranslations = {
   'Benjakitti Active — Park sports, made easier': ['เบญจกิติ แอคทีฟ — กีฬาในสวนที่ง่ายขึ้น', 'Benjakitti Active — 轻松畅享公园运动', 'ベンジャキティ・アクティブ — 公園スポーツをもっと気軽に'],
   'Park operations': ['การดำเนินงานของสวน', '公园运营', '公園の運営'], 'Staff workspace': ['พื้นที่ทำงานเจ้าหน้าที่', '工作人员工作区', 'スタッフ用ワークスペース'], 'Account settings': ['ตั้งค่าบัญชี', '账户设置', 'アカウント設定'],
@@ -24,6 +25,7 @@ const uiTranslations = {
   'Update park availability and handle on-the-day changes.': ['อัปเดตสถานะสวนและจัดการการเปลี่ยนแปลงในแต่ละวัน', '更新公园可用状态并处理当天的变更。', '公園の利用状況を更新し、当日の変更に対応します。'],
   'Search accounts and manage park access.': ['ค้นหาบัญชีและจัดการสิทธิ์เข้าใช้งาน', '搜索账户并管理公园访问权限。', 'アカウントを検索して利用権限を管理します。'],
   'Choose a color theme or match your device’s appearance.': ['เลือกธีมสีหรือใช้การตั้งค่าตามอุปกรณ์', '选择配色主题，或跟随设备外观设置。', 'テーマを選ぶか、デバイスの外観設定に合わせます。'],
+  'Text size': ['ขนาดตัวอักษร', '文字大小', '文字サイズ'], 'Choose the font size used across this website.': ['เลือกขนาดตัวอักษรที่ใช้ทั่วทั้งเว็บไซต์', '选择此网站的字体大小。', 'ウェブサイト全体で使う文字サイズを選択します。'], 'Original size': ['ขนาดเดิม', '原始大小', '元のサイズ'], 'Current size': ['ขนาดปัจจุบัน', '当前大小', '現在のサイズ'], 'Larger size': ['ขนาดใหญ่ขึ้น', '更大', '大きめ'],
   'Choose the language used across this website.': ['เลือกภาษาที่ใช้บนเว็บไซต์นี้', '选择此网站使用的语言。', 'このウェブサイトで使用する言語を選択します。'],
   'Your bookings will stay linked to your account.': ['การจองของคุณจะยังเชื่อมโยงกับบัญชีเดิม', '您的预约仍会关联到您的账户。', '予約は引き続きアカウントに紐づきます。'],
   'Court use and equipment bookings · estimated from park schedules': ['การใช้สนามและการจองอุปกรณ์ · ประมาณจากตารางของสวน', '球场使用和器材预约 · 根据公园时间表估算', 'コート利用・用具予約 · 公園のスケジュールから推定'],
@@ -40,7 +42,7 @@ const uiTranslations = {
   'Changes are saved to the shared database.': ['การเปลี่ยนแปลงบันทึกลงฐานข้อมูลส่วนกลางแล้ว', '更改已保存到共享数据库。', '変更は共有データベースに保存されます。'],
   'Staff changes are shared across devices.': ['การเปลี่ยนแปลงของเจ้าหน้าที่จะแสดงบนทุกอุปกรณ์', '工作人员的更改会同步到所有设备。', 'スタッフの変更はすべてのデバイスに反映されます。'],
   'Passwords are managed by secure authentication and can never be viewed. Enter a new password in Manage to reset one.': ['รหัสผ่านจัดการด้วยระบบยืนยันตัวตนที่ปลอดภัยและไม่สามารถดูได้ หากต้องการเปลี่ยน ให้กรอกรหัสผ่านใหม่ในเมนูจัดการ', '密码由安全身份验证系统管理，无法查看。如需重置，请在“管理”中输入新密码。', 'パスワードは安全な認証システムで管理され、表示できません。変更するには「管理」で新しいパスワードを入力してください。'],
-  'Bookings and park equipment are loaded from the shared database. Theme and language preferences stay on this device.': ['รายการจองและอุปกรณ์สวนโหลดจากฐานข้อมูลส่วนกลาง ส่วนธีมและภาษาจะบันทึกไว้ในอุปกรณ์นี้', '预约和公园器材已从共享数据库加载。主题和语言偏好保存在此设备上。', '予約と公園用具の情報は共有データベースから読み込まれます。テーマと言語設定はこのデバイスに保存されます。'],
+  'Bookings and park equipment are loaded from the shared database. Appearance, language, and font size preferences stay on this device.': ['รายการจองและอุปกรณ์สวนโหลดจากฐานข้อมูลส่วนกลาง ส่วนรูปลักษณ์ ภาษา และขนาดตัวอักษรจะบันทึกไว้ในอุปกรณ์นี้', '预约和公园器材已从共享数据库加载。外观、语言和字体大小偏好保存在此设备上。', '予約と公園用具は共有データベースから読み込まれます。外観、言語、文字サイズの設定はこのデバイスに保存されます。'],
   'Reservations are saved to the shared database. Staff changes are visible on other devices.': ['รายการจองบันทึกลงฐานข้อมูลส่วนกลาง การเปลี่ยนแปลงของเจ้าหน้าที่จะแสดงบนอุปกรณ์อื่นด้วย', '预约已保存到共享数据库。工作人员的更改会显示在其他设备上。', '予約は共有データベースに保存されます。スタッフの変更は他のデバイスにも反映されます。'],
   'Their account and associated reservations will be removed from the shared database.': ['บัญชีและรายการจองที่เกี่ยวข้องจะถูกลบออกจากฐานข้อมูลส่วนกลาง', '该账户及其相关预约将从共享数据库中删除。', 'このアカウントと関連する予約は共有データベースから削除されます。'],
   'For an operational service, the park would connect this interface to a shared booking and maintenance system.': ['หากนำไปใช้งานจริง สวนจะเชื่อมต่อหน้านี้กับระบบจองและบำรุงรักษาส่วนกลาง', '正式运营时，公园会将此界面连接到共享预约和维护系统。', '実際に運用する場合は、共通の予約・メンテナンスシステムに接続します。'],
@@ -359,15 +361,15 @@ function initialData() {
     } catch { return null; }
   })();
   if (backendConfigured) {
-    return { users: [], currentUser: null, theme: existing?.theme || 'system', locale: ['en','th','zh','ja'].includes(existing?.locale) ? existing.locale : 'en', courtBookings: [], equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [] };
+    return { users: [], currentUser: null, theme: existing?.theme || 'system', locale: ['en','th','zh','ja'].includes(existing?.locale) ? existing.locale : 'en', fontSize: validFontSize(existing?.fontSize), courtBookings: [], equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [] };
   }
   if (existing && Array.isArray(existing.users) && existing.users.some(u => u.role === 'head')) {
     const users = existing.users;
     if (!users.some(u => u.role === 'admin')) users.unshift(seededUsers[0]);
-    return { users, currentUser: existing.currentUser || null, theme: existing.theme || 'system', locale: ['en','th','zh','ja'].includes(existing.locale) ? existing.locale : 'en', courtBookings: existing.courtBookings || [], equipmentBookings: existing.equipmentBookings || [], equipmentOverrides: existing.equipmentOverrides || {}, courtMaintenance: existing.courtMaintenance || {}, friends: [], friendRequests: [], playInvites: existing.playInvites || [], friendships: existing.friendships || [] };
+    return { users, currentUser: existing.currentUser || null, theme: existing.theme || 'system', locale: ['en','th','zh','ja'].includes(existing.locale) ? existing.locale : 'en', fontSize: validFontSize(existing.fontSize), courtBookings: existing.courtBookings || [], equipmentBookings: existing.equipmentBookings || [], equipmentOverrides: existing.equipmentOverrides || {}, courtMaintenance: existing.courtMaintenance || {}, friends: [], friendRequests: [], playInvites: existing.playInvites || [], friendships: existing.friendships || [] };
   }
   return {
-    users: seededUsers, currentUser: null, theme: 'system', locale: 'en', courtBookings: makeSeedCourts(), equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [],
+    users: seededUsers, currentUser: null, theme: 'system', locale: 'en', fontSize: 'current', courtBookings: makeSeedCourts(), equipmentBookings: [], equipmentOverrides: {}, courtMaintenance: {}, friends: [], friendRequests: [], playInvites: [], friendships: [],
   };
 }
 
@@ -397,10 +399,10 @@ if (location.hash.startsWith('#')) {
 
 function saveData() {
   if (backendConfigured) {
-    localStorage.setItem(PREFERENCES_KEY, JSON.stringify({ theme: data.theme, locale: data.locale }));
+    localStorage.setItem(PREFERENCES_KEY, JSON.stringify({ theme: data.theme, locale: data.locale, fontSize: validFontSize(data.fontSize) }));
     return;
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ users: data.users, currentUser: data.currentUser, theme: data.theme, locale: data.locale, courtBookings: data.courtBookings, equipmentBookings: data.equipmentBookings, equipmentOverrides: data.equipmentOverrides, courtMaintenance: data.courtMaintenance, friendships: data.friendships, playInvites: data.playInvites }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ users: data.users, currentUser: data.currentUser, theme: data.theme, locale: data.locale, fontSize: validFontSize(data.fontSize), courtBookings: data.courtBookings, equipmentBookings: data.equipmentBookings, equipmentOverrides: data.equipmentOverrides, courtMaintenance: data.courtMaintenance, friendships: data.friendships, playInvites: data.playInvites }));
 }
 function currentUser() { return data.users.find(u => u.username === data.currentUser) || null; }
 function isAdmin() { return ['admin','head'].includes(currentUser()?.role); }
@@ -489,6 +491,7 @@ async function initializeApp() {
     })();
     data.theme = preferences.theme || data.theme;
     data.locale = ['en','th','zh','ja'].includes(preferences.locale) ? preferences.locale : data.locale;
+    data.fontSize = validFontSize(preferences.fontSize || data.fontSize);
     state.locale = data.locale;
     render();
     startRemoteRefresh();
@@ -528,6 +531,7 @@ function startRemoteRefresh() {
 function applyTheme() {
   const dark = data.theme === 'dark' || (data.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark-theme', dark);
+  document.documentElement.dataset.fontSize = validFontSize(data.fontSize);
 }
 function navigate(route, options = {}) {
   if (protectedRoutes.has(route) && !currentUser()) {
@@ -835,9 +839,15 @@ function renderAdminEquipment() {
 
 function renderSettings() {
   const user=currentUser();
-  const dataNote=backendConfigured?'Bookings and park equipment are loaded from the shared database. Theme and language preferences stay on this device.':'This demo uses sample court schedules and equipment status. Changes are saved in this browser only. It does not send reservations to park staff.';
+  const dataNote=backendConfigured?'Bookings and park equipment are loaded from the shared database. Appearance, language, and font size preferences stay on this device.':'This demo uses sample court schedules and equipment status. Changes are saved in this browser only. It does not send reservations to park staff.';
   const integrationNote=backendConfigured?'Reservations are saved to the shared database. Staff changes are visible on other devices.':'For an operational service, the park would connect this interface to a shared booking and maintenance system.';
-  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Your preferences</div><h1>Settings</h1><p>Make Benjakitti Active feel right for you.</p></div></div><div class="settings-grid"><section class="setting-card"><h2>Appearance</h2><p>Choose a color theme or match your device’s appearance.</p><div class="setting-row"><div><div class="setting-label">Theme</div><div class="setting-help">Applies on this browser and device.</div></div><select class="select-control" id="themeSelect"><option value="system" ${data.theme==='system'?'selected':''}>Use device setting</option><option value="light" ${data.theme==='light'?'selected':''}>Light</option><option value="dark" ${data.theme==='dark'?'selected':''}>Dark</option></select></div><div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-help">Choose the language used across this website.</div></div><select class="select-control" id="languageSelectSettings" aria-label="Language"><option value="en" ${state.locale==='en'?'selected':''}>English</option><option value="th" ${state.locale==='th'?'selected':''}>ไทย</option><option value="zh" ${state.locale==='zh'?'selected':''}>中文</option><option value="ja" ${state.locale==='ja'?'selected':''}>日本語</option></select></div></section><section class="setting-card"><h2>Account</h2><p>Update your username. Your bookings will stay linked to your account.</p>${user?`<form id="changeUsernameForm" class="form-stack"><div class="form-field"><label for="newUsername">Username</label><input id="newUsername" name="username" value="${escapeHTML(user.username)}" autocomplete="username" required><span class="form-hint">At least 8 characters and one English letter.</span></div><button class="button button-primary" type="submit">Save username</button><button class="button button-outline" type="button" data-action="logout">Log out</button></form>`:`<div class="empty-state"><strong>You’re browsing as a guest</strong>Log in to manage your account and bookings.<br><button class="button button-primary button-small" style="margin-top:11px" data-nav="login">Log in</button></div>`}</section><section class="setting-card"><h2>About this prototype</h2><p>${dataNote}</p><div class="notice">${icon('alert')}<span>${integrationNote}</span></div></section></div>`;
+  $('#main').innerHTML=`<div class="page-heading"><div><div class="eyebrow">Your preferences</div><h1>Settings</h1><p>Make Benjakitti Active feel right for you.</p></div></div><div class="settings-grid">
+    <section class="setting-card"><h2>Appearance</h2><p>Choose a color theme or match your device’s appearance.</p>
+      <div class="setting-row"><div><div class="setting-label">Theme</div><div class="setting-help">Applies on this browser and device.</div></div><select class="select-control" id="themeSelect"><option value="system" ${data.theme==='system'?'selected':''}>Use device setting</option><option value="light" ${data.theme==='light'?'selected':''}>Light</option><option value="dark" ${data.theme==='dark'?'selected':''}>Dark</option></select></div>
+      <div class="setting-row"><div><div class="setting-label">Text size</div><div class="setting-help">Choose the font size used across this website.</div></div><select class="select-control" id="fontSizeSelect" aria-label="Text size"><option value="old" ${validFontSize(data.fontSize)==='old'?'selected':''}>Original size</option><option value="current" ${validFontSize(data.fontSize)==='current'?'selected':''}>Current size</option><option value="large" ${validFontSize(data.fontSize)==='large'?'selected':''}>Larger size</option></select></div>
+      <div class="setting-row"><div><div class="setting-label">Language</div><div class="setting-help">Choose the language used across this website.</div></div><select class="select-control" id="languageSelectSettings" aria-label="Language"><option value="en" ${state.locale==='en'?'selected':''}>English</option><option value="th" ${state.locale==='th'?'selected':''}>ไทย</option><option value="zh" ${state.locale==='zh'?'selected':''}>中文</option><option value="ja" ${state.locale==='ja'?'selected':''}>日本語</option></select></div>
+    </section><section class="setting-card"><h2>Account</h2><p>Update your username. Your bookings will stay linked to your account.</p>${user?`<form id="changeUsernameForm" class="form-stack"><div class="form-field"><label for="newUsername">Username</label><input id="newUsername" name="username" value="${escapeHTML(user.username)}" autocomplete="username" required><span class="form-hint">At least 8 characters and one English letter.</span></div><button class="button button-primary" type="submit">Save username</button><button class="button button-outline" type="button" data-action="logout">Log out</button></form>`:`<div class="empty-state"><strong>You’re browsing as a guest</strong>Log in to manage your account and bookings.<br><button class="button button-primary button-small" style="margin-top:11px" data-nav="login">Log in</button></div>`}</section>
+    <section class="setting-card"><h2>About this prototype</h2><p>${dataNote}</p><div class="notice">${icon('alert')}<span>${integrationNote}</span></div></section></div>`;
   translateUI($('#main'));
 }
 
@@ -1057,6 +1067,7 @@ document.addEventListener('click', async (event) => {
 document.addEventListener('change', (event) => {
   const el=event.target;
   if(el.id==='themeSelect') { data.theme=el.value;saveData();applyTheme(); }
+  if(el.id==='fontSizeSelect') { data.fontSize=validFontSize(el.value);saveData();applyTheme(); }
   if(el.id==='languageSelect'||el.id==='languageSelectSettings') { data.locale=el.value;state.locale=el.value;saveData();render(); }
   if(el.id==='courtDate') { state.selectedDate=el.value||todayISO();renderCourtDetail(); }
   if(el.id==='equipmentDate') { state.equipmentDate=el.value||todayISO();renderEquipment(); }

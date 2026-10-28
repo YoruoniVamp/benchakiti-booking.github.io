@@ -487,3 +487,72 @@ body { font-size: 15px; line-height: 1.5; }
   .panel { padding: 16px; }
   .mobile-nav .nav-item { font-size: 8px; }
 }
+
+/* Three site-wide text presets; the layout, icons, and controls keep their proportions. */
+html {
+  --font-body: 15px;
+  --font-9: 9px; --font-10: 10px; --font-11: 11px; --font-12: 12px; --font-13: 13px;
+  --font-14: 14px; --font-15: 15px; --font-16: 16px; --font-18: 18px;
+  --h1-min: 25px; --h1-fluid: 3vw; --h1-max: 34px;
+  --hero-min: 24px; --hero-fluid: 3vw; --hero-max: 31px;
+  --metric-value: 25px; --metric-value-mobile: 23px; --metric-value-small: 20px;
+  --recommend-day: 23px; --auth-title: 23px;
+}
+html[data-font-size="old"] {
+  --font-body: 14px;
+  --font-9: 8px; --font-10: 9px; --font-11: 10px; --font-12: 10.5px; --font-13: 12px;
+  --font-14: 13px; --font-15: 14px; --font-16: 14px; --font-18: 17px;
+  --h1-min: 23px; --h1-fluid: 2.8vw; --h1-max: 30px;
+  --hero-min: 22px; --hero-fluid: 2.8vw; --hero-max: 28px;
+  --metric-value: 22px; --metric-value-mobile: 20px; --metric-value-small: 18px;
+  --recommend-day: 21px; --auth-title: 21px;
+}
+html[data-font-size="large"] {
+  --font-body: 17px;
+  --font-9: 10px; --font-10: 11px; --font-11: 12px; --font-12: 14px; --font-13: 15px;
+  --font-14: 16px; --font-15: 17px; --font-16: 18px; --font-18: 20px;
+  --h1-min: 28px; --h1-fluid: 3.3vw; --h1-max: 38px;
+  --hero-min: 27px; --hero-fluid: 3.3vw; --hero-max: 35px;
+  --metric-value: 28px; --metric-value-mobile: 26px; --metric-value-small: 23px;
+  --recommend-day: 26px; --auth-title: 26px;
+}
+body { font-size: var(--font-body); }
+.brand-name,.park-card-title,.panel-title,.sport-card-title,.setting-card h2 { font-size: var(--font-16); }
+.avatar { font-size: var(--font-11); }
+.brand-sub,.nav-caption,.park-card-label,.profile-role,.nav-item .nav-badge,.eyebrow,.form-field label,.setting-help,.management-toolbar p { font-size: var(--font-11); }
+.nav-item { font-size: var(--font-14); }
+.park-card-meta,.breadcrumb,.profile-name,.language-select,.park-status,.hero-kicker,.metric-top,.metric-unit,.metric-note,.panel-subtitle,.segment-button,.select-control,.input-control,.chart-legend,.date-pill,.button-small,.recommend-time,.queue-time,.category-stat-value,.occupancy-pill,.status-summary,.form-field input,.form-field select,.auth-switch,.toast,.court-meta,.equipment-serial,.management-court-title h3,.service-chip,.users-table td,.password-cell,.form-error,.auth-message,.notice,.search-wrap input,.modal-copy,.equipment-modal-status,.tooltip-time { font-size: var(--font-12); }
+.page-heading p,.section-intro { font-size: var(--font-14); }
+.button { font-size: var(--font-13); }
+.hero-banner p,.page-heading p,.section-intro,.recommend-reason,.setting-card > p,.auth-copy { line-height: 1.65; }
+.hero-banner p { font-size: var(--font-14); }
+.recommend-reason,.setting-card > p,.auth-copy { font-size: var(--font-13); }
+.recommend-meta,.empty-state,.sport-card-desc,.footnote,.form-hint,.demo-accounts,.management-court-title p,.management-empty,.admin-pickup-state,.modal-note,.friend-row-info span,.friend-pending { font-size: var(--font-11); }
+.queue-name,.empty-state strong,.court-title,.tooltip-user,.friend-row-info strong { font-size: var(--font-13); }
+.queue-tag,.category-stat-label,.sport-card-bottom,.sport-card-bottom strong { font-size: var(--font-12); }
+.management-booking-info strong { font-size: var(--font-11); }
+.management-booking-info span { font-size: var(--font-10); }
+.court-open-label,.timeline-legend { font-size: var(--font-10); }
+.timeline-head { font-size: var(--font-9); }
+.equipment-name { font-size: var(--font-12); }
+.equipment-status { font-size: var(--font-10); }
+.users-table th,.role-chip { font-size: var(--font-10); }
+.modal-title { font-size: var(--font-18); }
+h1 { font-size: clamp(var(--h1-min), var(--h1-fluid), var(--h1-max)); }
+.hero-banner h1 { font-size: clamp(var(--hero-min), var(--hero-fluid), var(--hero-max)); }
+.metric-value { font-size: var(--metric-value); }
+.recommend-day { font-size: var(--recommend-day); }
+.auth-title { font-size: var(--auth-title); }
+.setting-row { flex-wrap: wrap; }
+.setting-row > div:first-child { min-width: 0; flex: 1 1 150px; }
+.setting-row .select-control { flex: 0 1 180px; max-width: 100%; }
+@media (max-width: 640px) {
+  .metric-value { font-size: var(--metric-value-mobile); }
+  .mobile-nav .nav-item { font-size: var(--font-9); }
+  .sport-card-title { font-size: var(--font-12); }
+  .setting-row .select-control { flex: 1 1 100%; }
+}
+@media (max-width: 380px) {
+  .metric-value { font-size: var(--metric-value-small); }
+  .mobile-nav .nav-item { font-size: var(--font-9); }
+}
